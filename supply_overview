@@ -1,0 +1,41 @@
+SELECT			CASE
+				WHEN fc.focus_city_name IS NULL
+				THEN 'Others'
+				ELSE fc.focus_city_name
+				END AS city,
+				DATE(ao.published_at) published_at,
+				ao.id AS "offer_id",
+				ao.offer_type AS "offer_type",
+				p.typology_number_of_bedrooms AS "total_bedrooms",
+				ao.number_of_units AS "total_nits",
+				nn.name AS "ops_neighborhood",
+				ao.reference_rent_amount/100 as "rent",
+				CASE
+				WHEN ap.account_management_key_account = 1
+				THEN 'KA'
+				ELSE 'SML'
+				END as "ap_type",
+				CASE
+				WHEN ao.created_by_type = 'accommodation-provider' OR ao.created_by = 'c4f8a449-e69e-484a-a277-939b0a1a1e63'
+				THEN 'self-service'
+				ELSE 'agents'
+				END AS "created_by",
+				CASE 
+				WHEN ao.created_by = ap.id 
+				THEN 'non full edit'
+				ELSE 'full edit'
+				END AS "ss",	
+				DATE(ao.available_from) AS "availability",
+				bs.score as "score"
+FROM			reporting.accommodation_offer ao
+LEFT JOIN		reporting.property AS p ON p.id = ao.property_id
+LEFT JOIN		reporting.accommodation_provider ap ON ap.id = p.accommodation_provider_id
+LEFT JOIN		main.focus_city fc ON fc.city = p.address_city_code
+LEFT JOIN		reporting.prospective_property pp ON p.id = pp.id
+LEFT JOIN		reporting.neighborhood nn ON nn.id = p.neighborhood_id
+LEFT JOIN		main.uniplaces_week uw ON uw.date_week = DATE(ao.published_at)
+LEFT JOIN  	main.bookable_supply as bs ON bs.offer_id = ao.id
+WHERE			ap.is_test = 0
+			AND ao.parent_id IS NULL						AND ao.published_at IS NOT NULL				AND p.out_of_platform = 0 
+			AND ap.out_of_platform = 0
+			AND ao.published = 1;
