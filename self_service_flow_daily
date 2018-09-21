@@ -7,7 +7,7 @@ SELECT		ssf.date,
 					WHEN so.created_by = 'self-service' AND so.ss = 'non full edit'
 					THEN 1
 					ELSE 0
-					END )
+					END ) AS self_service_offers_published
 FROM		business_intelligence.self_service_flow_daily_aux ssf
 LEFT JOIN	business_intelligence.supply_overview so ON DATE(so.published_at) = ssf.date
 GROUP BY	ssf.date,
