@@ -1,0 +1,10 @@
+SELECT		date(requested_at),
+			    atso.city,
+			    week_up,
+			    COUNT(DISTINCT(b.id)) as bookings_requested
+FROM		  reporting.booking b
+LEFT JOIN	 business_intelligence.all_time_supply_overview atso ON atso.offer_id = b.offer_id
+LEFT JOIN	 main.uniplaces_week uw ON uw.date_week = DATE(b.requested_at)
+WHERE		  b.financial_has_payment_details = 1
+		AND EXTRACT(year from requested_at) = 2018
+GROUP BY	1,2,3
