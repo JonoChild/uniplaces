@@ -1,0 +1,29 @@
+SELECT 		DATE(ap.created_at) as date,
+			CASE
+			WHEN focus_city_name IS NULL
+			THEN 'Others'
+			ELSE focus_city_name
+			END as focus_city,
+			ap.id as ap_id,
+			SUM( CASE 
+			WHEN ao.published_at IS NOT NULL 
+			THEN 1 ELSE 0 
+			END ) as nbr_offers_published,
+			
+			CASE
+			WHEN SUM( 	CASE 
+						WHEN ao.published_at IS NOT NULL 
+						THEN 1 ELSE 0 
+						END ) > 0
+			THEN 1
+			ELSE 0
+			END	as 	ap_offer_published	
+FROM		upl_users_v1
+LEFT JOIN	reporting.accommodation_provider ap ON upl_users_v1.user_id = ap.id
+LEFT JOIN	reporting.property p ON ap.id = p.accommodation_provider_id
+LEFT JOIN	main.focus_city fc ON fc.city = p.address_city_code
+LEFT JOIN	reporting.accommodation_offer ao ON ao.property_id = p.id
+WHERE		ap.is_test = 0
+		AND ao.parent_id IS NULL
+		AND upl_users_v1.user_type = 'accommodation-provider'
+GROUP BY 1,2,3
