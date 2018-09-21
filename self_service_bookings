@@ -1,7 +1,7 @@
 SELECT		date(paid_at),
 			    atso.city,
 			    week_up,
-			  COUNT(DISTINCT(b.id)) as bookings_requested
+			  COUNT(DISTINCT(b.id)) as bookings_paid
 FROM		reporting.booking b
 LEFT JOIN	business_intelligence.all_time_supply_overview atso ON atso.offer_id = b.offer_id
 LEFT JOIN	main.uniplaces_week uw ON uw.date_week = DATE(b.requested_at)
