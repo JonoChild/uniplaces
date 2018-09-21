@@ -3,6 +3,8 @@ SELECT		ssf.date,
 			ssf.nbr_aps,
 			ssf.nbr_offers_published,
 			ssf.nbr_aps_w_offers_pubished,
+			ssr.bookings_requested,
+			ssb.bookings_paid,
 			SUM(	CASE		
 					WHEN so.created_by = 'self-service' AND so.ss = 'non full edit'
 					THEN 1
@@ -10,8 +12,12 @@ SELECT		ssf.date,
 					END ) AS self_service_offers_published
 FROM		business_intelligence.self_service_flow_daily_aux ssf
 LEFT JOIN	business_intelligence.supply_overview so ON DATE(so.published_at) = ssf.date
+LEFT JOIN 	business_intelligence.self_service_requests_daily ssr ON ssr.date = ssf.date
+LEFT JOIN	business_intelligence.self_service_bookings_daily ssb ON ssb.date = ssf.date
 GROUP BY	ssf.date,
 			ssf.users,
 			ssf.nbr_aps,
 			ssf.nbr_offers_published,
-			ssf.nbr_aps_w_offers_pubished;
+			ssf.nbr_aps_w_offers_pubished,
+			ssr.bookings_requested,
+			ssb.bookings_paid
