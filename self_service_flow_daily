@@ -1,0 +1,8 @@
+SELECT  	a.date,
+			    users,
+			    COUNT(DISTINCT(ap_id)) as nbr_aps,
+			    SUM(nbr_offers_published) as nbr_offers_published,
+			    SUM(ap_offer_published) as nbr_aps_w_offers_pubished
+FROM		  self_service_total_users a
+LEFT JOIN	self_service_users_signup_and_offers b ON a.date = b.date
+GROUP BY 	1,2
