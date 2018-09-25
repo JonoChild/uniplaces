@@ -1,0 +1,20 @@
+business_intelligence.users_ids
+(
+SELECT		distinct(id) as id,
+			DATE(registered_at) as registered_at,
+			'guest' as user_type
+FROM		reporting.guest
+WHERE		first_name NOT LIKE '%test%'
+		OR last_name NOT LIKE '%test%'
+GROUP BY	1,2,3
+
+UNION ALL
+
+SELECT		distinct(id) as id,
+			DATE(created_at) as registered_at,
+			'accommodation_provider' as user_type
+FROM		reporting.accommodation_provider
+WHERE		is_test = 0
+GROUP BY 	1,2)
+
+;
