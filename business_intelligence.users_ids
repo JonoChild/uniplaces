@@ -1,20 +1,26 @@
 business_intelligence.users_ids
-(
 SELECT		distinct(id) as id,
-			DATE(registered_at) as registered_at,
-			'guest' as user_type
+		DATE(registered_at) as registered_at,
+		registration_city_code as registration_city,
+		'guest' as user_type
 FROM		reporting.guest
 WHERE		first_name NOT LIKE '%test%'
-		OR last_name NOT LIKE '%test%'
+	OR last_name NOT LIKE '%test%'
 GROUP BY	1,2,3
 
 UNION ALL
-
-SELECT		distinct(id) as id,
-			DATE(created_at) as registered_at,
-			'accommodation_provider' as user_type
-FROM		reporting.accommodation_provider
-WHERE		is_test = 0
-GROUP BY 	1,2)
-
-;
+		
+SELECT		x.id as id,
+		x.ap_created_at as registered_at,
+		p.address_city_code as registration_city, -- this is the property city
+							  -- in cases where AP 1+ properties, is the 1st created
+		'accommodation-provider' as user_type
+FROM
+		(	SELECT		DISTINCT(ap.id) as id,
+					DATE(ap.created_at) as ap_created_at,
+					min(p.created_at) as property_created_at
+			FROM		reporting.accommodation_provider ap
+			LEFT JOIN 	reporting.property p ON ap.id = p.accommodation_provider_id
+			WHERE		ap.is_test = 0
+			GROUP BY	1,2) x 
+LEFT JOIN		reporting.property p ON p.accommodation_provider_id = x.id AND p.created_at = x.property_created_at
