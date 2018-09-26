@@ -1,0 +1,5 @@
+
+SELECT		DISTINCT(user_id),
+			    min(created_at) as first_creation
+FROM	  	business_intelligence.touches_overall_view
+GROUP BY	1
