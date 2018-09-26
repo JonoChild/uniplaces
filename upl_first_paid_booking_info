@@ -1,0 +1,12 @@
+SELECT		business_intelligence.upl_bookings_info.*
+FROM (
+
+        SELECT		user_id,
+			            min(requested_at) as first_request_at
+        FROM		business_intelligence.upl_bookings_info
+        WHERE		business_intelligence.upl_bookings_info.paid_at IS NOT NULL
+        GROUP BY	1) x
+LEFT JOIN	business_intelligence.upl_bookings_info 
+					ON 	business_intelligence.upl_bookings_info.user_id = x.user_id AND
+						business_intelligence.upl_bookings_info.requested_at = x.first_request_at
+;
