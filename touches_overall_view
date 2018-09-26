@@ -1,0 +1,14 @@
+
+SELECT		public.upl_touches_v1.touch_id,
+			    public.upl_touches_v1.created_at,
+			    business_intelligence.users_touches_tracking_list.user_id,
+			    public.upl_touches_v1.source,
+    			public.upl_touches_v1.medium,
+	    		public.upl_touches_v1.campaign,
+		    	public.upl_touches_v1.source || '-' || medium || '-' || campaign as camp_name,
+			    public.upl_touches_v1.gclid
+FROM		  public.upl_touches_v1
+LEFT JOIN	business_intelligence.users_touches_tracking_list ON business_intelligence.users_touches_tracking_list.touch_id = public.upl_touches_v1.touch_id
+WHERE		  DATE(public.upl_touches_v1.created_at) >= '2018-09-18'
+
+;
