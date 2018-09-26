@@ -1,5 +1,6 @@
 SELECT 		x.user_id,
 		x.first_creation,
+		business_intelligence.touches_overall_view.touch_id,
 		business_intelligence.touches_overall_view.source,
 		business_intelligence.touches_overall_view.medium,			
 		business_intelligence.touches_overall_view.campaign,
