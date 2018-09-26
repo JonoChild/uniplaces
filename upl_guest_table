@@ -29,7 +29,7 @@ SELECT		business_intelligence.users_ids.id,
 			business_intelligence.upl_first_paid_booking_info.campaign as first_paid_booking_campaign,
 			business_intelligence.upl_first_paid_booking_info.camp_name as first_paid_booking_camp_name,
 			business_intelligence.upl_first_paid_booking_info.paid_at as first_paid_booking_paid_at,
-			business_intelligence.upl_first_paid_booking_info.paid_at as first_paid_booking_net_revenue
+			business_intelligence.upl_first_paid_booking_info.net_revenue as first_paid_booking_net_revenue
 FROM		business_intelligence.users_ids
 LEFT JOIN	business_intelligence.first_touch_by_user 
 					ON business_intelligence.first_touch_by_user.user_id = business_intelligence.users_ids.id
