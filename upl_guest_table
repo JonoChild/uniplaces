@@ -1,5 +1,5 @@
 -- CREATE VIEW business_intelligence.upl_guest_table AS
-SELECT		business_intelligence.users_ids.id,
+SELECT		business_intelligence.users_ids.id as user_id,
 			business_intelligence.users_ids.registered_at,
 			business_intelligence.users_ids.registration_city,
 			business_intelligence.users_ids.user_type,
@@ -38,5 +38,35 @@ LEFT JOIN	business_intelligence.last_touch_by_user
 LEFT JOIN	business_intelligence.upl_first_request_info
 					ON business_intelligence.upl_first_request_info.user_id = business_intelligence.users_ids.id
 LEFT JOIN	business_intelligence.upl_first_paid_booking_info
-					ON business_intelligence.upl_first_paid_booking_info.user_id = business_intelligence.users_ids.id					
-					
+					ON business_intelligence.upl_first_paid_booking_info.user_id = business_intelligence.users_ids.id	
+GROUP BY	business_intelligence.users_ids.id,
+			business_intelligence.users_ids.registered_at,
+			business_intelligence.users_ids.registration_city,
+			business_intelligence.users_ids.user_type,
+			business_intelligence.first_touch_by_user.first_creation,
+			business_intelligence.first_touch_by_user.touch_id, 
+			business_intelligence.first_touch_by_user.source ,
+			business_intelligence.first_touch_by_user.medium ,
+			business_intelligence.first_touch_by_user.campaign,
+			business_intelligence.first_touch_by_user.camp_name,
+			business_intelligence.first_touch_by_user.gclid,
+			business_intelligence.last_touch_by_user.last_creation ,
+			business_intelligence.last_touch_by_user.touch_id, 
+			business_intelligence.last_touch_by_user.source ,
+			business_intelligence.last_touch_by_user.medium,
+			business_intelligence.last_touch_by_user.campaign,
+			business_intelligence.last_touch_by_user.camp_name,
+			business_intelligence.last_touch_by_user.gclid,
+			business_intelligence.upl_first_request_info.extra_info,
+			business_intelligence.upl_first_request_info.source ,
+			business_intelligence.upl_first_request_info.medium ,
+			business_intelligence.upl_first_request_info.campaign ,
+			business_intelligence.upl_first_request_info.camp_name,
+			business_intelligence.upl_first_request_info.paid_at,
+			business_intelligence.upl_first_paid_booking_info.extra_info,
+			business_intelligence.upl_first_paid_booking_info.source ,
+			business_intelligence.upl_first_paid_booking_info.medium ,
+			business_intelligence.upl_first_paid_booking_info.campaign,
+			business_intelligence.upl_first_paid_booking_info.camp_name,
+			business_intelligence.upl_first_paid_booking_info.paid_at,
+			business_intelligence.upl_first_paid_booking_info.net_revenue
