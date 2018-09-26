@@ -1,0 +1,17 @@
+
+SELECT 		x.user_id,
+			  x.last_creation,
+			  business_intelligence.touches_overall_view.touch_id,
+			  business_intelligence.touches_overall_view.source,
+			  business_intelligence.touches_overall_view.medium,
+			  business_intelligence.touches_overall_view.campaign,
+			  business_intelligence.touches_overall_view.camp_name,
+			  business_intelligence.touches_overall_view.gclid
+FROM		(			 
+			    SELECT	DISTINCT(user_id),
+				          max(created_at) as last_creation
+			    FROM	business_intelligence.touches_overall_view
+			    GROUP BY	1 ) x
+LEFT JOIN	business_intelligence.touches_overall_view ON
+			            business_intelligence.touches_overall_view.user_id = x.user_id
+           	AND 	business_intelligence.touches_overall_view.created_at = x.last_creation;
