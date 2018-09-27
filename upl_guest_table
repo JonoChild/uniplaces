@@ -1,6 +1,7 @@
-SELECT			business_intelligence.users_ids.id as user_id,
+SELECT		business_intelligence.users_ids.id as user_id,
 			business_intelligence.users_ids.registered_at,
-			main.uniplaces_week.week_up as week,
+			EXTRACT(year from business_intelligence.users_ids.registered_at) as registered_at_year,
+			main.uniplaces_week.week_up as registered_at_week,
 			business_intelligence.users_ids.registration_city,
 			business_intelligence.users_ids.user_type,
 			business_intelligence.first_touch_by_user.first_creation as first_touch_at,
@@ -50,8 +51,9 @@ LEFT JOIN		business_intelligence.last_touch_non_direct
 					ON business_intelligence.last_touch_non_direct.user_id = business_intelligence.users_ids.id
 LEFT JOIN		main.uniplaces_week 
 					ON main.uniplaces_week.date_week = DATE(business_intelligence.users_ids.registered_at)
-GROUP BY		business_intelligence.users_ids.id,
+GROUP BY		business_intelligence.users_ids.id ,
 			business_intelligence.users_ids.registered_at,
+			EXTRACT(year from business_intelligence.users_ids.registered_at),
 			main.uniplaces_week.week_up,
 			business_intelligence.users_ids.registration_city,
 			business_intelligence.users_ids.user_type,
