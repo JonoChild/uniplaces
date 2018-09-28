@@ -1,0 +1,20 @@
+-- CREATE VIEW business_intelligence.demand_flow_by_source AS
+SELECT		registered_at_year,
+			registered_at_week,
+			first_touch_source,
+			first_touch_source_top_line,
+			first_touch_source_cost_grouping,
+			last_touch_non_direct_source,
+			top_line_grouping as last_touch_non_direct_source_top_line,
+			cost_grouping as last_touch_non_direct_source_cost_grouping
+FROM		business_intelligence.demand_flow_by_source_aux
+LEFT JOIN	business_intelligence.source_classification 
+			ON business_intelligence.source_classification.upl_source =   business_intelligence.demand_flow_by_source_aux.last_touch_non_direct_source
+GROUP BY  	registered_at_year,
+			registered_at_week,
+			first_touch_source,
+			first_touch_source_top_line,
+			first_touch_source_cost_grouping,
+			last_touch_non_direct_source,
+			top_line_grouping,
+			cost_grouping ;
