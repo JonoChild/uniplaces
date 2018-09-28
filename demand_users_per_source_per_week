@@ -1,10 +1,10 @@
--- CREATE	VIEW demand_users_per_source_per_week AS
-SELECT		EXTRACT(year from date),
+-- CREATE VIEW business_intelligence.demand_users_per_source_per_week AS
+SELECT		EXTRACT(year from date) as year,
 			week,
 			source,
 			top_line_grouping,
 			cost_grouping,
-			sum(users)
+			sum(users) as users
 FROM		alooma.demand_users_per_sorce_per_week
 LEFT JOIN	business_intelligence.source_classification
 				ON business_intelligence.source_classification.upl_source =
@@ -14,3 +14,4 @@ GROUP BY	EXTRACT(year from date),
 			source,
 			top_line_grouping,
 			cost_grouping;
+			
