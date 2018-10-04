@@ -1,4 +1,4 @@
-CREATE VIEW upl_bookings_info AS
+CREATE VIEW business_intelligence.upl_bookings_info AS
 
 SELECT 			DISTINCT(public.upl_actions_v1.extra_info),
 				    reporting.booking_old.guest_id as user_id,
