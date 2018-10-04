@@ -1,30 +1,77 @@
+CREATE VIEW 	business_intelligence.upl_guest_table_demand AS
 SELECT		business_intelligence.users_ids.id as user_id,
 			business_intelligence.users_ids.registered_at,
 			EXTRACT(year from business_intelligence.users_ids.registered_at) as registered_at_year,
 			main.uniplaces_week.week_up as registered_at_week,
 			business_intelligence.users_ids.registration_city,
 			business_intelligence.users_ids.user_type,
+			
 			business_intelligence.first_touch_by_user.first_creation as first_touch_at,
 			business_intelligence.first_touch_by_user.touch_id as first_touch_id, 
 			business_intelligence.first_touch_by_user.source as first_touch_source,
+			business_intelligence.first_touch_by_user.top_line_grouping as first_touch_top_line_grouping,
+			business_intelligence.first_touch_by_user.cost_grouping as first_touch_cost_grouping,
 			business_intelligence.first_touch_by_user.medium as first_touch_medium,
 			business_intelligence.first_touch_by_user.campaign as first_touch_campaign,
 			business_intelligence.first_touch_by_user.camp_name as first_touch_camp_name,
 			business_intelligence.first_touch_by_user.gclid as first_touch_gclid,
+			
 			business_intelligence.last_touch_by_user.last_creation as last_touch_at,
 			business_intelligence.last_touch_by_user.touch_id as last_touch_id, 
 			business_intelligence.last_touch_by_user.source as last_touch_source,
+			business_intelligence.last_touch_by_user.top_line_grouping as last_touch_top_line_grouping,
+			business_intelligence.last_touch_by_user.cost_grouping as last_touch_cost_grouping,
 			business_intelligence.last_touch_by_user.medium as last_touch_medium,
 			business_intelligence.last_touch_by_user.campaign as last_touch_campaign,
 			business_intelligence.last_touch_by_user.camp_name as last_touch_camp_name,
 			business_intelligence.last_touch_by_user.gclid as last_touch_gclid,
-			business_intelligence.last_touch_non_direct.last_creation as last_touch_non_direct_at,
-			business_intelligence.last_touch_non_direct.touch_id as last_touch_non_direct_id, 
-			business_intelligence.last_touch_non_direct.source as last_touch_non_direct_source,
-			business_intelligence.last_touch_non_direct.medium as last_touch_non_direct_medium,
-			business_intelligence.last_touch_non_direct.campaign as last_touch_non_direct_campaign,
-			business_intelligence.last_touch_non_direct.camp_name as last_touch_non_direct_camp_name,
-			business_intelligence.last_touch_non_direct.gclid as last_touch_non_direct_gclid,
+			
+			CASE 
+			WHEN business_intelligence.last_nd_touch_by_user.created_at IS NULL 
+			THEN business_intelligence.last_touch_by_user.last_creation
+			ELSE business_intelligence.last_nd_touch_by_user.created_at
+			END as last_touch_non_direct_at,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.touch_id IS NULL
+			THEN business_intelligence.last_touch_by_user.touch_id
+			ELSE business_intelligence.last_nd_touch_by_user.touch_id 
+			END AS last_touch_non_direct_id, 
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.source IS NULL
+			THEN business_intelligence.last_touch_by_user.source
+			ELSE business_intelligence.last_nd_touch_by_user.source 
+			END AS last_touch_non_direct_source,
+			CASE 
+			WHEN business_intelligence.last_nd_touch_by_user.top_line_grouping IS NULL			THEN business_intelligence.last_touch_by_user.top_line_grouping
+			ELSE business_intelligence.last_nd_touch_by_user.top_line_grouping 
+			END as last_touch_non_direct_top_line_grouping,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.cost_grouping IS NULL
+			THEN business_intelligence.last_touch_by_user.cost_grouping
+			ELSE business_intelligence.last_nd_touch_by_user.cost_grouping
+			END AS last_touch_non_direct_cost_grouping,
+			CASE 
+			WHEN business_intelligence.last_nd_touch_by_user.medium IS NULL
+			THEN business_intelligence.last_touch_by_user.medium
+			ELSE business_intelligence.last_nd_touch_by_user.medium 
+			END AS last_touch_non_direct_medium,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.campaign IS NULL
+			THEN business_intelligence.last_touch_by_user.campaign
+			ELSE business_intelligence.last_nd_touch_by_user.campaign 
+			END AS last_touch_non_direct_campaign,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.camp_name IS NULL
+			THEN  business_intelligence.last_touch_by_user.camp_name
+			ELSE business_intelligence.last_nd_touch_by_user.camp_name 
+			END AS last_touch_non_direct_camp_name,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.gclid IS NULL
+			THEN business_intelligence.last_touch_by_user.gclid
+			ELSE business_intelligence.last_nd_touch_by_user.gclid 
+			END AS last_touch_non_direct_gclid,
+			
+			
 			business_intelligence.upl_first_request_info.extra_info as first_request_id,
 			business_intelligence.upl_first_request_info.source as first_request_source,
 			business_intelligence.upl_first_request_info.medium as first_request_medium,
@@ -47,40 +94,87 @@ LEFT JOIN		business_intelligence.upl_first_request_info
 					ON business_intelligence.upl_first_request_info.user_id = business_intelligence.users_ids.id
 LEFT JOIN		business_intelligence.upl_first_paid_booking_info
 					ON business_intelligence.upl_first_paid_booking_info.user_id = business_intelligence.users_ids.id
-LEFT JOIN		business_intelligence.last_touch_non_direct
-					ON business_intelligence.last_touch_non_direct.user_id = business_intelligence.users_ids.id
+LEFT JOIN		business_intelligence.last_nd_touch_by_user
+					ON business_intelligence.last_nd_touch_by_user.user_id = business_intelligence.users_ids.id
 LEFT JOIN		main.uniplaces_week 
 					ON main.uniplaces_week.date_week = DATE(business_intelligence.users_ids.registered_at)
-GROUP BY		business_intelligence.users_ids.id ,
+WHERE			user_type = 'guest'
+GROUP BY		business_intelligence.users_ids.id,
 			business_intelligence.users_ids.registered_at,
-			EXTRACT(year from business_intelligence.users_ids.registered_at),
-			main.uniplaces_week.week_up,
+			EXTRACT(year from business_intelligence.users_ids.registered_at) ,
+			main.uniplaces_week.week_up ,
 			business_intelligence.users_ids.registration_city,
 			business_intelligence.users_ids.user_type,
-			business_intelligence.first_touch_by_user.first_creation ,
-			business_intelligence.first_touch_by_user.touch_id, 
-			business_intelligence.first_touch_by_user.source,
-			business_intelligence.first_touch_by_user.medium,
+			
+			business_intelligence.first_touch_by_user.first_creation,
+			business_intelligence.first_touch_by_user.touch_id , 
+			business_intelligence.first_touch_by_user.source ,
+			business_intelligence.first_touch_by_user.top_line_grouping,
+			business_intelligence.first_touch_by_user.cost_grouping ,
+			business_intelligence.first_touch_by_user.medium ,
 			business_intelligence.first_touch_by_user.campaign,
 			business_intelligence.first_touch_by_user.camp_name,
-			business_intelligence.first_touch_by_user.gclid,
-			business_intelligence.last_touch_by_user.last_creation,
+			business_intelligence.first_touch_by_user.gclid ,
+			
+			business_intelligence.last_touch_by_user.last_creation ,
 			business_intelligence.last_touch_by_user.touch_id, 
-			business_intelligence.last_touch_by_user.source,
-			business_intelligence.last_touch_by_user.medium,
+			business_intelligence.last_touch_by_user.source ,
+			business_intelligence.last_touch_by_user.top_line_grouping ,
+			business_intelligence.last_touch_by_user.cost_grouping ,
+			business_intelligence.last_touch_by_user.medium ,
 			business_intelligence.last_touch_by_user.campaign,
-			business_intelligence.last_touch_by_user.camp_name,
-			business_intelligence.last_touch_by_user.gclid,
-			business_intelligence.last_touch_non_direct.last_creation,
-			business_intelligence.last_touch_non_direct.touch_id, 
-			business_intelligence.last_touch_non_direct.source,
-			business_intelligence.last_touch_non_direct.medium,
-			business_intelligence.last_touch_non_direct.campaign,
-			business_intelligence.last_touch_non_direct.camp_name,
-			business_intelligence.last_touch_non_direct.gclid,
+			business_intelligence.last_touch_by_user.camp_name ,
+			business_intelligence.last_touch_by_user.gclid ,
+			
+			CASE 
+			WHEN business_intelligence.last_nd_touch_by_user.created_at IS NULL 
+			THEN business_intelligence.last_touch_by_user.last_creation
+			ELSE business_intelligence.last_nd_touch_by_user.created_at
+			END ,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.touch_id IS NULL
+			THEN business_intelligence.last_touch_by_user.touch_id
+			ELSE business_intelligence.last_nd_touch_by_user.touch_id 
+			END, 
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.source IS NULL
+			THEN business_intelligence.last_touch_by_user.source
+			ELSE business_intelligence.last_nd_touch_by_user.source 
+			END,
+			CASE 
+			WHEN business_intelligence.last_nd_touch_by_user.top_line_grouping IS NULL			THEN business_intelligence.last_touch_by_user.top_line_grouping
+			ELSE business_intelligence.last_nd_touch_by_user.top_line_grouping 
+			END,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.cost_grouping IS NULL
+			THEN business_intelligence.last_touch_by_user.cost_grouping
+			ELSE business_intelligence.last_nd_touch_by_user.cost_grouping
+			END,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.medium IS NULL
+			THEN business_intelligence.last_touch_by_user.medium
+			ELSE business_intelligence.last_nd_touch_by_user.medium 
+			END,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.campaign IS NULL
+			THEN business_intelligence.last_touch_by_user.campaign
+			ELSE business_intelligence.last_nd_touch_by_user.campaign 
+			END,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.camp_name IS NULL
+			THEN  business_intelligence.last_touch_by_user.camp_name
+			ELSE business_intelligence.last_nd_touch_by_user.camp_name 
+			END,
+			CASE
+			WHEN business_intelligence.last_nd_touch_by_user.gclid IS NULL
+			THEN business_intelligence.last_touch_by_user.gclid
+			ELSE business_intelligence.last_nd_touch_by_user.gclid 
+			END,
+			
+			
 			business_intelligence.upl_first_request_info.extra_info,
 			business_intelligence.upl_first_request_info.source,
-			business_intelligence.upl_first_request_info.medium,
+			business_intelligence.upl_first_request_info.medium ,
 			business_intelligence.upl_first_request_info.campaign,
 			business_intelligence.upl_first_request_info.camp_name,
 			business_intelligence.upl_first_request_info.paid_at,
