@@ -1,19 +1,41 @@
--- CREATE VIEW business_intelligence.first_touch_by_user AS
-SELECT 		x.user_id,
-		x.first_creation,
-		business_intelligence.touches_overall_view.touch_id,
-		business_intelligence.touches_overall_view.source,
-		business_intelligence.touches_overall_view.top_line_grouping,
-		business_intelligence.touches_overall_view.cost_grouping,
-		business_intelligence.touches_overall_view.medium,
-		business_intelligence.touches_overall_view.campaign,
-		business_intelligence.touches_overall_view.camp_name,
-		business_intelligence.touches_overall_view.gclid
-FROM		(			 
-			SELECT	DISTINCT(user_id),
-				min(created_at) as first_creation
-			FROM	business_intelligence.touches_overall_view
-			GROUP BY	1 ) x
-LEFT JOIN	business_intelligence.touches_overall_view ON
-					business_intelligence.touches_overall_view.user_id = x.user_id
-				AND 	business_intelligence.touches_overall_view.created_at = x.first_creation;
+CREATE VIEW	business_intelligence.first_touch_by_user AS
+
+SELECT 			
+				business_intelligence.trackings_by_user.user_id,
+				x.tracking_id,
+				x.first_creation,
+				business_intelligence.touches_overall_view.touch_id,
+				business_intelligence.touches_overall_view.source,
+				business_intelligence.touches_overall_view.top_line_grouping,
+				business_intelligence.touches_overall_view.cost_grouping,
+				business_intelligence.touches_overall_view.medium,
+				business_intelligence.touches_overall_view.campaign,
+				business_intelligence.touches_overall_view.camp_name,
+				business_intelligence.touches_overall_view.gclid
+
+FROM	(
+
+			SELECT		DISTINCT(business_intelligence.touches_overall_view.tracking_id),
+						min(created_at) as first_creation
+			FROM		business_intelligence.touches_overall_view
+			LEFT JOIN	business_intelligence.trackings_by_user
+							ON	business_intelligence.trackings_by_user.user_id = business_intelligence.touches_overall_view.user_id
+			WHERE 		business_intelligence.trackings_by_user.user_id IS NULL
+			GROUP BY	1) x
+			
+LEFT JOIN	business_intelligence.touches_overall_view 
+				ON		business_intelligence.touches_overall_view.user_id = x.tracking_id
+				AND 	business_intelligence.touches_overall_view.created_at = x.first_creation
+LEFT JOIN	business_intelligence.trackings_by_user 
+				ON	business_intelligence.trackings_by_user.tracking_id = x.tracking_id
+GROUP BY	business_intelligence.trackings_by_user.user_id,
+				x.tracking_id,
+				x.first_creation,
+				business_intelligence.touches_overall_view.touch_id,
+				business_intelligence.touches_overall_view.source,
+				business_intelligence.touches_overall_view.top_line_grouping,
+				business_intelligence.touches_overall_view.cost_grouping,
+				business_intelligence.touches_overall_view.medium,
+				business_intelligence.touches_overall_view.campaign,
+				business_intelligence.touches_overall_view.camp_name,
+				business_intelligence.touches_overall_view.gclid
