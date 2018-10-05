@@ -1,0 +1,14 @@
+CREATE VIEW business_intelligence.last_nd_touch_by_user AS
+
+SELECT business_intelligence.trackings_by_user_with_signup_date_and_non_signup_touches.*
+
+
+FROM	(
+			SELECT			user_id,
+							max(touch_id) as touch_id
+			FROM			business_intelligence.trackings_by_user_with_signup_date_and_non_signup_touches
+			WHERE			created_at < registered_at
+			GROUP BY 1 ) x
+LEFT JOIN	business_intelligence.trackings_by_user_with_signup_date_and_non_signup_touches
+				ON x.user_id = business_intelligence.trackings_by_user_with_signup_date_and_non_signup_touches.user_id
+				AND x.touch_id= business_intelligence.trackings_by_user_with_signup_date_and_non_signup_touches.touch_id 
