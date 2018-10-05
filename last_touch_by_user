@@ -1,7 +1,8 @@
--- CREATE VIEW 	business_intelligence.last_touch_by_user AS 
+CREATE VIEW business_intelligence.last_touch_by_user AS 
 SELECT 		  x.user_id,
 			  x.last_creation,
 			  business_intelligence.touches_overall_view.touch_id,
+			  business_intelligence.touches_overall_view.city,
 			  business_intelligence.touches_overall_view.source,
 			  business_intelligence.touches_overall_view.top_line_grouping,
 			  business_intelligence.touches_overall_view.cost_grouping,
@@ -19,4 +20,16 @@ FROM		(
 				GROUP BY	1 ) x
 LEFT JOIN	business_intelligence.touches_overall_view ON
 			            business_intelligence.touches_overall_view.user_id = x.user_id
-           	AND 	business_intelligence.touches_overall_view.created_at = x.last_creation;
+           	AND 	business_intelligence.touches_overall_view.created_at = x.last_creation
+GROUP BY 	  x.user_id,
+			  x.last_creation,
+			  business_intelligence.touches_overall_view.touch_id,
+			  business_intelligence.touches_overall_view.city,
+			  business_intelligence.touches_overall_view.source,
+			  business_intelligence.touches_overall_view.top_line_grouping,
+			  business_intelligence.touches_overall_view.cost_grouping,
+			  business_intelligence.touches_overall_view.medium,
+			  business_intelligence.touches_overall_view.campaign,
+			  business_intelligence.touches_overall_view.camp_name,
+			  business_intelligence.touches_overall_view.gclid
+;
