@@ -1,0 +1,28 @@
+CREATE VIEW business_intelligence.first_touch_by_user_aux AS
+
+SELECT 		business_intelligence.trackings_first_creation.tracking_id,
+			    business_intelligence.trackings_first_creation.first_creation,
+    			business_intelligence.trackings_first_creation.touch_id,
+	  		  business_intelligence.touches_overall_view.city,
+		  	  business_intelligence.touches_overall_view.source,
+			    business_intelligence.touches_overall_view.top_line_grouping,
+    			business_intelligence.touches_overall_view.cost_grouping,
+		    	business_intelligence.touches_overall_view.medium,
+    			business_intelligence.touches_overall_view.campaign,
+	    		business_intelligence.touches_overall_view.camp_name,
+			    business_intelligence.touches_overall_view.gclid
+FROM 		  business_intelligence.trackings_first_creation
+LEFT JOIN	business_intelligence.touches_overall_view 
+				    ON business_intelligence.touches_overall_view.touch_id =  business_intelligence.trackings_first_creation.touch_id
+						AND business_intelligence.touches_overall_view.created_at =  business_intelligence.trackings_first_creation.first_creation
+GROUP BY	business_intelligence.trackings_first_creation.tracking_id,
+			    business_intelligence.trackings_first_creation.first_creation,
+    			business_intelligence.trackings_first_creation.touch_id,
+    			business_intelligence.touches_overall_view.city,
+		    	business_intelligence.touches_overall_view.source,
+    			business_intelligence.touches_overall_view.top_line_grouping,
+		    	business_intelligence.touches_overall_view.cost_grouping,
+			    business_intelligence.touches_overall_view.medium,
+		    	business_intelligence.touches_overall_view.campaign,
+			    business_intelligence.touches_overall_view.camp_name,
+    			business_intelligence.touches_overall_view.gclid
