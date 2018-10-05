@@ -1,4 +1,4 @@
--- CREATE VIEW business_intelligence.first_touch_by_user AS 
+CREATE VIEW business_intelligence.first_touch_by_user AS 
 
 SELECT			business_intelligence.first_touch_by_user_aux_2.*
 
@@ -14,6 +14,3 @@ GROUP BY 1 ) y
 INNER JOIN	business_intelligence.first_touch_by_user_aux_2
 				ON business_intelligence.first_touch_by_user_aux_2.user_id = y.user_id
 					AND business_intelligence.first_touch_by_user_aux_2.first_creation = y.first_creation
-					
-					
-					
