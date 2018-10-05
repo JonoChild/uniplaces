@@ -6,6 +6,7 @@ SELECT 			DISTINCT(public.upl_actions_v1.extra_info),
 				    public.upl_actions_v1.action,
 				    reporting.booking.current_state,
 				    reporting.booking.offer_id,
+				    reporting.property.address_city_code,
 				    reporting.booking.offer_exclusive,
 				    reporting.booking.guest_purpose_of_stay,
 				    reporting.booking.requested_at,
@@ -23,20 +24,25 @@ SELECT 			DISTINCT(public.upl_actions_v1.extra_info),
 				    business_intelligence.touches_overall_view.camp_name,
 				    business_intelligence.touches_overall_view.gclid,
 				    SUM(reporting.transactions.money_value)/100 as net_revenue
-FROM 			  public.upl_actions_v1
-LEFT JOIN		reporting.booking ON reporting.booking.id = public.upl_actions_v1.extra_info
-LEFT JOIN		business_intelligence.touches_overall_view ON business_intelligence.touches_overall_view.touch_id =public.upl_actions_v1.touch_id 	
-LEFT JOIN		reporting.transactions ON reporting.transactions.booking_id = public.upl_actions_v1.extra_info
-LEFT JOIN		business_intelligence.source_classification
+FROM 			  	public.upl_actions_v1
+LEFT JOIN			reporting.booking ON reporting.booking.id = public.upl_actions_v1.extra_info
+LEFT JOIN			business_intelligence.touches_overall_view ON business_intelligence.touches_overall_view.touch_id =public.upl_actions_v1.touch_id 	
+LEFT JOIN			reporting.transactions ON reporting.transactions.booking_id = public.upl_actions_v1.extra_info
+LEFT JOIN			business_intelligence.source_classification
 					ON business_intelligence.source_classification.upl_source = business_intelligence.touches_overall_view.source
+LEFT JOIN			reporting.accommodation_offer
+						ON reporting.accommodation_offer.id = reporting.booking.offer_id
+LEFT JOIN			reporting.property
+						ON reporting.property.id = reporting.accommodation_offer.property_id
 WHERE			  DATE(public.upl_actions_v1.created_at) >= '2018-09-18'
 			  AND public.upl_actions_v1.action = 'booking-request'
-GROUP BY		public.upl_actions_v1.extra_info,
+GROUP BY			public.upl_actions_v1.extra_info,
 				  reporting.booking.guest_id,
 				  public.upl_actions_v1.touch_id,
 				  public.upl_actions_v1.action,
 				  reporting.booking.current_state,
 				  reporting.booking.offer_id,
+				  reporting.property.address_city_code,
 				  reporting.booking.offer_exclusive,
 				  reporting.booking.guest_purpose_of_stay,
 				  reporting.booking.requested_at,
