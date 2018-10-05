@@ -1,0 +1,32 @@
+CREATE VIEW business_intelligence.trackings_by_user_with_signup_date_and_non_signup_touches AS 
+SELECT		business_intelligence.trackings_by_user.user_id,
+			reporting.guest.registered_at,
+			business_intelligence.trackings_by_user.tracking_id,
+			business_intelligence.nd_trackings_list.touch_id,
+			business_intelligence.nd_trackings_list.created_at,
+			business_intelligence.nd_trackings_list.city,
+			business_intelligence.nd_trackings_list.source,
+			business_intelligence.nd_trackings_list.top_line_grouping,
+			business_intelligence.nd_trackings_list.cost_grouping,
+			business_intelligence.nd_trackings_list.medium,
+			business_intelligence.nd_trackings_list.campaign,
+			business_intelligence.nd_trackings_list.camp_name,
+			business_intelligence.nd_trackings_list.gclid
+FROM		business_intelligence.trackings_by_user
+LEFT JOIN	reporting.guest ON reporting.guest.id = business_intelligence.trackings_by_user.user_id
+LEFT JOIN	business_intelligence.nd_trackings_list 
+				ON business_intelligence.nd_trackings_list.tracking_id = business_intelligence.trackings_by_user.tracking_id 
+GROUP BY	
+	business_intelligence.trackings_by_user.user_id,
+			reporting.guest.registered_at,
+			business_intelligence.trackings_by_user.tracking_id,
+			business_intelligence.nd_trackings_list.touch_id,
+			business_intelligence.nd_trackings_list.created_at,
+			business_intelligence.nd_trackings_list.city,
+			business_intelligence.nd_trackings_list.source,
+			business_intelligence.nd_trackings_list.top_line_grouping,
+			business_intelligence.nd_trackings_list.cost_grouping,
+			business_intelligence.nd_trackings_list.medium,
+			business_intelligence.nd_trackings_list.campaign,
+			business_intelligence.nd_trackings_list.camp_name,
+			business_intelligence.nd_trackings_list.gclid
