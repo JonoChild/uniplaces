@@ -1,0 +1,27 @@
+CREATE VIEW business_intelligence.nd_trackings_list AS 
+SELECT 			business_intelligence.touches_overall_view.tracking_id,
+				business_intelligence.touches_overall_view.touch_id,
+				upl_actions_v1.action,
+				business_intelligence.touches_overall_view.created_at,
+				business_intelligence.touches_overall_view.source,
+				business_intelligence.touches_overall_view.top_line_grouping,
+				business_intelligence.touches_overall_view.cost_grouping,
+				business_intelligence.touches_overall_view.medium,
+				business_intelligence.touches_overall_view.campaign,
+				business_intelligence.touches_overall_view.camp_name,
+				business_intelligence.touches_overall_view.gclid
+FROM			business_intelligence.touches_overall_view
+LEFT JOIN		upl_actions_v1
+					ON upl_actions_v1.touch_id =  business_intelligence.touches_overall_view.touch_id
+WHERE			source <> 'direct'
+GROUP BY		business_intelligence.touches_overall_view.tracking_id,
+				business_intelligence.touches_overall_view.touch_id,
+				upl_actions_v1.action,
+				business_intelligence.touches_overall_view.created_at,
+				business_intelligence.touches_overall_view.source,
+				business_intelligence.touches_overall_view.top_line_grouping,
+				business_intelligence.touches_overall_view.cost_grouping,
+				business_intelligence.touches_overall_view.medium,
+				business_intelligence.touches_overall_view.campaign,
+				business_intelligence.touches_overall_view.camp_name,
+				business_intelligence.touches_overall_view.gclid;
