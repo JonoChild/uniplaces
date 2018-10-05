@@ -1,8 +1,9 @@
-CREATE VIEW 			business_intelligence.touches_overall_view AS
+CREATE VIEW 	business_intelligence.touches_overall_view AS
 SELECT			public.upl_touches_v1.touch_id,
 				public.upl_touches_v1.tracking_id,
 			    public.upl_touches_v1.created_at,
 			    business_intelligence.users_touches_tracking_list.user_id,
+			    public.upl_touches_v1.city,
 			    public.upl_touches_v1.source,
 			    business_intelligence.source_classification.top_line_grouping,
 			    business_intelligence.source_classification.cost_grouping,
@@ -21,6 +22,7 @@ GROUP BY		public.upl_touches_v1.touch_id,
 				public.upl_touches_v1.tracking_id,
 			    public.upl_touches_v1.created_at,
 			    business_intelligence.users_touches_tracking_list.user_id,
+			    public.upl_touches_v1.city,
 			   	public.upl_touches_v1.source,
 			   	business_intelligence.source_classification.top_line_grouping,
 			    business_intelligence.source_classification.cost_grouping,
