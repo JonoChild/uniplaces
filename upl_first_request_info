@@ -1,3 +1,4 @@
+CREATE VIEW business_intelligence.upl_first_request_info AS
 SELECT		business_intelligence.upl_bookings_info.*
 FROM (
           SELECT		user_id,
