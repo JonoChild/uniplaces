@@ -1,0 +1,29 @@
+CREATE VIEW business_intelligence.first_touch_by_user_aux_2 AS
+
+SELECT 		business_intelligence.trackings_by_user.user_id,
+	       business_intelligence.trackings_by_user.tracking_id,
+    	   	business_intelligence.first_touch_by_user_aux.touch_id,
+			business_intelligence.first_touch_by_user_aux.first_creation,
+			business_intelligence.first_touch_by_user_aux.city,
+			business_intelligence.first_touch_by_user_aux.source,
+			business_intelligence.first_touch_by_user_aux.top_line_grouping,
+			business_intelligence.first_touch_by_user_aux.cost_grouping,
+			business_intelligence.first_touch_by_user_aux.medium,
+			business_intelligence.first_touch_by_user_aux.campaign,
+			business_intelligence.first_touch_by_user_aux.camp_name,
+			business_intelligence.first_touch_by_user_aux.gclid
+FROM 		business_intelligence.trackings_by_user
+LEFT JOIN 	business_intelligence.first_touch_by_user_aux
+				ON business_intelligence.first_touch_by_user_aux.tracking_id = business_intelligence.trackings_by_user.tracking_id
+GROUP BY 	business_intelligence.trackings_by_user.user_id,
+			business_intelligence.trackings_by_user.tracking_id,
+			business_intelligence.first_touch_by_user_aux.touch_id,
+			business_intelligence.first_touch_by_user_aux.first_creation,
+			business_intelligence.first_touch_by_user_aux.city,
+			business_intelligence.first_touch_by_user_aux.source,
+			business_intelligence.first_touch_by_user_aux.top_line_grouping,
+			business_intelligence.first_touch_by_user_aux.cost_grouping,
+			business_intelligence.first_touch_by_user_aux.medium,
+			business_intelligence.first_touch_by_user_aux.campaign,
+			business_intelligence.first_touch_by_user_aux.camp_name,
+			business_intelligence.first_touch_by_user_aux.gclid
