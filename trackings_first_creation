@@ -1,0 +1,15 @@
+CREATE VIEW business_intelligence.trackings_first_creation AS
+SELECT    *
+FROM      (
+            SELECT  x.tracking_id,
+                    x.first_creation,
+                    min(business_intelligence.touches_overall_view.touch_id) as touch_id
+            FROM (
+                    SELECT  DISTINCT(business_intelligence.touches_overall_view.tracking_id),
+                            min(created_at) as first_creation
+                    FROM business_intelligence.touches_overall_view
+                    GROUP BY 1) x
+            LEFT JOIN business_intelligence.touches_overall_view
+                        ON business_intelligence.touches_overall_view.tracking_id = x.tracking_id
+                        AND business_intelligence.touches_overall_view.created_at = x.first_creation
+            GROUP BY 1,2) w
