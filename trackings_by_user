@@ -1,0 +1,7 @@
+CREATE VIEW     business_intelligence.trackings_by_user AS
+SELECT          user_id,
+                tracking_id
+FROM            upl_users_v1
+WHERE           user_type = 'guest'
+            AND user_id IS NOT NULL
+            AND DATE(created_at) >= '2018-09-18'
