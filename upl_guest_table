@@ -83,14 +83,14 @@ SELECT			business_intelligence.users_ids.id as user_id,
 			
 				business_intelligence.upl_first_request_info.extra_info as first_request_id,
 				business_intelligence.upl_first_request_info.source as first_request_source,
-				business_intelligence.upl_first_request_info.city as first_request_city,
+				business_intelligence.upl_first_request_info.address_city_code as first_request_city,
 				business_intelligence.upl_first_request_info.medium as first_request_medium,
 				business_intelligence.upl_first_request_info.campaign as first_request_campaign,
 				business_intelligence.upl_first_request_info.camp_name as first_request_camp_name,
 				business_intelligence.upl_first_request_info.paid_at as first_request_paid_at,
 				business_intelligence.upl_first_paid_booking_info.extra_info as first_paid_booking_id,
 				business_intelligence.upl_first_paid_booking_info.source as first_paid_booking_source,
-				business_intelligence.upl_first_paid_booking_info.city as first_paid_booking_city,
+				business_intelligence.upl_first_paid_booking_info.address_city_code as first_paid_booking_city,
 				business_intelligence.upl_first_paid_booking_info.medium as first_paid_booking_medium,
 				business_intelligence.upl_first_paid_booking_info.campaign as first_paid_booking_campaign,
 				business_intelligence.upl_first_paid_booking_info.camp_name as first_paid_booking_camp_name,
@@ -153,7 +153,7 @@ GROUP BY		business_intelligence.users_ids.id ,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.city IS NULL
 				THEN business_intelligence.last_touch_by_user.city
-				ELSE business_intelligence.last_nd_touch_by_user.city 
+				ELSE business_intelligence.last_nd_touch_by_user.city
 				END ,
 				
 				CASE
@@ -194,14 +194,14 @@ GROUP BY		business_intelligence.users_ids.id ,
 			
 				business_intelligence.upl_first_request_info.extra_info ,
 				business_intelligence.upl_first_request_info.source ,
-				business_intelligence.upl_first_request_info.city,
+				business_intelligence.upl_first_request_info.address_city_code,
 				business_intelligence.upl_first_request_info.medium,
 				business_intelligence.upl_first_request_info.campaign,
 				business_intelligence.upl_first_request_info.camp_name,
 				business_intelligence.upl_first_request_info.paid_at,
 				business_intelligence.upl_first_paid_booking_info.extra_info,
 				business_intelligence.upl_first_paid_booking_info.source ,
-				business_intelligence.upl_first_paid_booking_info.city ,
+				business_intelligence.upl_first_paid_booking_info.address_city_code ,
 				business_intelligence.upl_first_paid_booking_info.medium,
 				business_intelligence.upl_first_paid_booking_info.campaign,
 				business_intelligence.upl_first_paid_booking_info.camp_name,
