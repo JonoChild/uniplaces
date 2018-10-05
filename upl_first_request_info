@@ -7,3 +7,4 @@ FROM (
 LEFT JOIN	business_intelligence.upl_bookings_info 
 					      ON 	business_intelligence.upl_bookings_info.user_id = x.user_id 
                 AND business_intelligence.upl_bookings_info.requested_at = x.first_request_at;
+;
