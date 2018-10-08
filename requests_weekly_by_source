@@ -8,6 +8,7 @@ SELECT			EXTRACT(year from reporting.booking.requested_at) as year,
 				THEN	'Others'
 				ELSE	focus_city_name
 				END AS focus_city_name,
+				LEFT(reporting.property.address_city_code,2) AS market,
 				reporting.booking.current_state,
 				reporting.booking.guest_id,
 				business_intelligence.upl_guest_table_demand.last_touch_non_direct_top_line_grouping as guest_nd_touch_top_line_grouping,
@@ -53,6 +54,7 @@ GROUP BY		EXTRACT(year from reporting.booking.requested_at),
 				THEN	'Others'
 				ELSE	focus_city_name
 				END,
+				LEFT(reporting.property.address_city_code,2),
 				reporting.booking.current_state,
 				reporting.booking.guest_id,
 				business_intelligence.upl_guest_table_demand.last_touch_non_direct_top_line_grouping,
