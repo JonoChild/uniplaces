@@ -21,7 +21,8 @@ SELECT			EXTRACT(year from reporting.booking.requested_at) as year,
 				reporting.booking.cancelled_at,
 				public.upl_actions_v1.touch_id,
 				business_intelligence.touches_overall_view.top_line_grouping,
-				business_intelligence.touches_overall_view.cost_grouping
+				business_intelligence.touches_overall_view.cost_grouping,
+				SUM(reporting.transactions.money_value)/100 as net_renevue_eur
 FROM			reporting.booking
 LEFT JOIN		main.uniplaces_week
 					ON main.uniplaces_week.date_week = DATE(reporting.booking.requested_at)
@@ -38,6 +39,8 @@ LEFT JOIN		business_intelligence.upl_guest_table_demand
 					ON business_intelligence.upl_guest_table_demand.user_id = reporting.booking.guest_id 
 LEFT JOIN		main.focus_city
 					ON main.focus_city.city = reporting.property.address_city_code
+LEFT JOIN		reporting.transactions
+					ON reporting.transactions.booking_id = reporting.booking.id					
 WHERE			reporting.accommodation_provider.is_test = 0
 			AND	EXTRACT(year from reporting.booking.requested_at) > 2017
 			AND financial_has_payment_details = 1
