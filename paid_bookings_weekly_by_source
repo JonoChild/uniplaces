@@ -3,6 +3,11 @@ SELECT			EXTRACT(year from reporting.booking.paid_at) as year,
 				week_up as week,
 				reporting.booking.id as booking_id,
 				reporting.property.address_city_code as city,
+				CASE
+				WHEN	focus_city_name IS NULL
+				THEN	'Others'
+				ELSE	focus_city_name
+				END AS focus_city_name,
 				reporting.booking.current_state,
 				reporting.booking.guest_id,
 				business_intelligence.upl_guest_table_demand.last_touch_non_direct_top_line_grouping as guest_nd_touch_top_line_grouping,
@@ -31,6 +36,8 @@ LEFT JOIN		business_intelligence.touches_overall_view
 					ON business_intelligence.touches_overall_view.touch_id =  public.upl_actions_v1.touch_id
 LEFT JOIN		business_intelligence.upl_guest_table_demand
 					ON business_intelligence.upl_guest_table_demand.user_id = reporting.booking.guest_id 
+LEFT JOIN		main.focus_city
+					ON main.focus_city.city = reporting.property.address_city_code
 WHERE			reporting.accommodation_provider.is_test = 0
 			AND	EXTRACT(year from reporting.booking.requested_at) > 2017
 			AND financial_has_payment_details = 1
@@ -38,6 +45,11 @@ GROUP BY		EXTRACT(year from reporting.booking.requested_at),
 				week_up,
 				reporting.booking.id,
 				reporting.property.address_city_code,
+				CASE
+				WHEN	focus_city_name IS NULL
+				THEN	'Others'
+				ELSE	focus_city_name
+				END,
 				reporting.booking.current_state,
 				reporting.booking.guest_id,
 				business_intelligence.upl_guest_table_demand.last_touch_non_direct_top_line_grouping,
