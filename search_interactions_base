@@ -1,4 +1,5 @@
-CREATE VIEW  	business_intelligence.search_interactions_base AS
+CREATE TABLE  business_intelligence.search_interactions_base 
+AS 
 SELECT 			public.offer_search_v1.search_id,
 				public.offer_search_v1.guest_id,
 				public.offer_search_v1.tracking_id,
