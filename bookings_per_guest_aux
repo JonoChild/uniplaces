@@ -1,0 +1,22 @@
+CREATE VIEW business_intelligence.bookings_per_guest_aux AS
+SELECT		reporting.guest.id as guest_id,
+			DATE(reporting.guest.registered_at) as signup_at,
+			
+			COUNT( DISTINCT(
+			CASE
+			WHEN	financial_has_payment_details = 1
+			THEN 	reporting.booking.id
+			END ))	as guest_nbr_requests,
+					
+			COUNT( DISTINCT(
+			CASE
+			WHEN	paid_at IS NOT NULL
+			THEN 	reporting.booking.id
+			END ))	as guest_nbr_paid_bookings
+			
+					
+FROM		reporting.guest
+LEFT JOIN	reporting.booking
+				ON reporting.booking.guest_id = reporting.guest.id
+WHERE		DATE(reporting.guest.registered_at) >= '2018-09-01'
+GROUP BY 1,2
