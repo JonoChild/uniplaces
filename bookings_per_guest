@@ -1,5 +1,6 @@
-CREATE VIEW business_intelligence.bookings_per_guest_aux AS
+CREATE VIEW business_intelligence.bookings_per_guest AS
 SELECT		reporting.guest.id as guest_id,
+			reporting.guest.registration_country_code,
 			DATE(reporting.guest.registered_at) as signup_at,
 			
 			COUNT( DISTINCT(
@@ -19,4 +20,4 @@ FROM		reporting.guest
 LEFT JOIN	reporting.booking
 				ON reporting.booking.guest_id = reporting.guest.id
 WHERE		DATE(reporting.guest.registered_at) >= '2018-09-01'
-GROUP BY 1,2
+GROUP BY 1,2,3
