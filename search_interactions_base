@@ -38,15 +38,23 @@ SELECT 			public.offer_search_v1.search_id,
 				ELSE 0
 				END AS satisfied_search,
 				CASE
-				WHEN COUNT(DISTINCT(public.offer_search_click_v1.offer_id)) > 0
+				WHEN SUM(
+				CASE
+				WHEN public.offer_search_v1.search_id IN (SELECT search_id FROM public.offer_search_click_v1)
+				THEN 1
+				ELSE 0
+				END) > 0
 				THEN 1
 				ELSE 0
 				END AS search_w_clicks,
 				
 				COUNT(DISTINCT(public.offer_search_results_v1.offer_id)) as nbr_results,
-				COUNT(DISTINCT(public.offer_search_click_v1.offer_id)) as nbr_offers_clicked
-				
-				
+				SUM(
+				CASE
+				WHEN public.offer_search_v1.search_id IN (SELECT search_id FROM public.offer_search_click_v1)
+				THEN 1
+				ELSE 0
+				END) as nbr_clicks
 FROM 	 		public.offer_search_v1
 LEFT JOIN		public.upl_touches_v1
 					ON public.upl_touches_v1.tracking_id =  public.offer_search_v1.tracking_id
