@@ -1,103 +1,78 @@
-CREATE TABLE  business_intelligence.search_interactions_base 
-AS 
-SELECT 			public.offer_search_v1.search_id,
-				public.offer_search_v1.guest_id,
-				public.offer_search_v1.tracking_id,
-				public.upl_touches_v1.device,
-				public.upl_touches_v1.device_model,
-				public.offer_search_v1.country,
-				public.offer_search_v1.city,
-				public.offer_search_v1.sort_by,
-				DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second') as searched_at,
-				EXTRACT(year from DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second')) as searched_at_year,
-				EXTRACT(month from DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second')) as searched_at_month,
-				main.uniplaces_week.week_up as searched_at_week,
-				public.offer_search_v1.experiment_id,
-				public.offer_search_v1.free_text_search,
-				public.offer_search_v1.move_in,
-				public.offer_search_v1.move_out,
-				public.offer_search_v1.budget_minimum,
-				public.offer_search_v1.budget_maximum,
-				public.offer_search_v1.rent_types,
-				public.offer_search_v1.number_of_bedrooms,
-				public.offer_search_v1.number_of_bathrooms,
-				public.offer_search_v1.accommodation_types,
-				public.offer_search_v1.features,
-				public.offer_search_v1.suitable_for_erasmus_students,
-				public.offer_search_v1.suitable_for_domestic_students,
-				public.offer_search_v1.suitable_for_professional_placement,
-				public.offer_search_v1.gender_restrictions,
-				public.offer_search_v1.occupancy_restrictions,
-				public.offer_search_v1.bills_included,
-				business_intelligence.bookings_search_overview.booking_id,
-				business_intelligence.bookings_search_overview.paid_at,
-				business_intelligence.bookings_search_overview.net_revenue_eur,
-				CASE
-				WHEN COUNT(DISTINCT(public.offer_search_results_v1.offer_id)) > 0
-				THEN 1
-				ELSE 0
-				END AS satisfied_search,
-				CASE
-				WHEN SUM(
-				CASE
-				WHEN public.offer_search_v1.search_id IN (SELECT search_id FROM public.offer_search_click_v1)
-				THEN 1
-				ELSE 0
-				END) > 0
-				THEN 1
-				ELSE 0
-				END AS search_w_clicks,
-				
-				COUNT(DISTINCT(public.offer_search_results_v1.offer_id)) as nbr_results,
-				SUM(
-				CASE
-				WHEN public.offer_search_v1.search_id IN (SELECT search_id FROM public.offer_search_click_v1)
-				THEN 1
-				ELSE 0
-				END) as nbr_clicks
-FROM 	 		public.offer_search_v1
-LEFT JOIN		public.upl_touches_v1
-					ON public.upl_touches_v1.tracking_id =  public.offer_search_v1.tracking_id
-LEFT JOIN		public.offer_search_results_v1
-					ON public.offer_search_results_v1.search_id =  public.offer_search_v1.search_id
-LEFT JOIN		public.offer_search_click_v1
-	 				ON public.offer_search_click_v1.search_id = public.offer_search_v1.search_id
-LEFT JOIN		main.uniplaces_week
-					ON main.uniplaces_week.date_week = DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second')
-LEFT JOIN		business_intelligence.bookings_search_overview
-					ON business_intelligence.bookings_search_overview.search_id = public.offer_search_v1.search_id
-WHERE	 		DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second') >= '2018-09-01'
-			AND public.offer_search_v1.sort_by = 'quality'
-			AND public.offer_search_click_v1.event_name = 'guest_click_offer'
-GROUP BY		public.offer_search_v1.search_id,
-				public.offer_search_v1.guest_id,
-				public.offer_search_v1.tracking_id,
-				public.upl_touches_v1.device,
-				public.upl_touches_v1.device_model,
-				public.offer_search_v1.country,
-				public.offer_search_v1.city,
-				public.offer_search_v1.sort_by,
-				DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second'),
-				EXTRACT(year from DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second')),
-				EXTRACT(month from DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second')),
-				main.uniplaces_week.week_up ,
-				public.offer_search_v1.experiment_id,
-				public.offer_search_v1.free_text_search,
-				public.offer_search_v1.move_in,
-				public.offer_search_v1.move_out,
-				public.offer_search_v1.budget_minimum,
-				public.offer_search_v1.budget_maximum,
-				public.offer_search_v1.rent_types,
-				public.offer_search_v1.number_of_bedrooms,
-				public.offer_search_v1.number_of_bathrooms,
-				public.offer_search_v1.accommodation_types,
-				public.offer_search_v1.features,
-				public.offer_search_v1.suitable_for_erasmus_students,
-				public.offer_search_v1.suitable_for_domestic_students,
-				public.offer_search_v1.suitable_for_professional_placement,
-				public.offer_search_v1.gender_restrictions,
-				public.offer_search_v1.occupancy_restrictions,
-				public.offer_search_v1.bills_included,
-				business_intelligence.bookings_search_overview.booking_id,
-				business_intelligence.bookings_search_overview.paid_at,
-				business_intelligence.bookings_search_overview.net_revenue_eur
+CREATE VIEW 	business_intelligence.search_interactions_base AS 
+SELECT			business_intelligence.search_interactions_base_aux.search_id,
+				business_intelligence.search_interactions_base_aux.guest_id,
+				business_intelligence.search_interactions_base_aux.tracking_id,
+				business_intelligence.device_by_tracking_info.device,
+				business_intelligence.device_by_tracking_info.device_model,
+				business_intelligence.search_interactions_base_aux.country,
+				business_intelligence.search_interactions_base_aux.city,
+				business_intelligence.search_interactions_base_aux.sort_by,
+				business_intelligence.search_interactions_base_aux.searched_at,
+				business_intelligence.search_interactions_base_aux.searched_at_year,
+				business_intelligence.search_interactions_base_aux.searched_at_month,
+				business_intelligence.search_interactions_base_aux.searched_at_week,
+				business_intelligence.search_interactions_base_aux.experiment_id,
+				business_intelligence.search_interactions_base_aux.free_text_search,
+				business_intelligence.search_interactions_base_aux.move_in,
+				business_intelligence.search_interactions_base_aux.move_out,
+				business_intelligence.search_interactions_base_aux.budget_minimum,
+				business_intelligence.search_interactions_base_aux.budget_maximum,
+				business_intelligence.search_interactions_base_aux.rent_types,
+				business_intelligence.search_interactions_base_aux.number_of_bedrooms,
+				business_intelligence.search_interactions_base_aux.number_of_bathrooms,
+				business_intelligence.search_interactions_base_aux.accommodation_types,
+				business_intelligence.search_interactions_base_aux.features,
+				business_intelligence.search_interactions_base_aux.suitable_for_erasmus_students,
+				business_intelligence.search_interactions_base_aux.suitable_for_domestic_students,
+				business_intelligence.search_interactions_base_aux.suitable_for_professional_placement,
+				business_intelligence.search_interactions_base_aux.gender_restrictions,
+				business_intelligence.search_interactions_base_aux.occupancy_restrictions,
+				business_intelligence.search_interactions_base_aux.bills_included,
+				business_intelligence.search_results.nbr_results,
+				business_intelligence.search_clicks.nbr_offers_clicked,
+				business_intelligence.search_bookings_info.nbr_requests,
+				business_intelligence.search_bookings_info.nbr_paid_bookings,
+				business_intelligence.search_bookings_info.sum as net_revenue_eur
+FROM			business_intelligence.search_interactions_base_aux
+LEFT JOIN		business_intelligence.device_by_tracking_info 
+					ON business_intelligence.device_by_tracking_info.tracking_id = business_intelligence.search_interactions_base_aux.tracking_id
+LEFT JOIN		business_intelligence.search_results
+					ON business_intelligence.search_results.search_id = business_intelligence.search_interactions_base_aux.search_id
+LEFT JOIN		business_intelligence.search_clicks
+					ON business_intelligence.search_clicks.search_id =  business_intelligence.search_interactions_base_aux.search_id
+LEFT JOIN		business_intelligence.search_bookings_info
+					ON business_intelligence.search_bookings_info.search_id = business_intelligence.search_interactions_base_aux.search_id
+GROUP BY 		business_intelligence.search_interactions_base_aux.search_id,
+				business_intelligence.search_interactions_base_aux.guest_id,
+				business_intelligence.search_interactions_base_aux.tracking_id,
+				business_intelligence.device_by_tracking_info.device,
+				business_intelligence.device_by_tracking_info.device_model,
+				business_intelligence.search_interactions_base_aux.country,
+				business_intelligence.search_interactions_base_aux.city,
+				business_intelligence.search_interactions_base_aux.sort_by,
+				business_intelligence.search_interactions_base_aux.searched_at,
+				business_intelligence.search_interactions_base_aux.searched_at_year,
+				business_intelligence.search_interactions_base_aux.searched_at_month,
+				business_intelligence.search_interactions_base_aux.searched_at_week,
+				business_intelligence.search_interactions_base_aux.experiment_id,
+				business_intelligence.search_interactions_base_aux.free_text_search,
+				business_intelligence.search_interactions_base_aux.move_in,
+				business_intelligence.search_interactions_base_aux.move_out,
+				business_intelligence.search_interactions_base_aux.budget_minimum,
+				business_intelligence.search_interactions_base_aux.budget_maximum,
+				business_intelligence.search_interactions_base_aux.rent_types,
+				business_intelligence.search_interactions_base_aux.number_of_bedrooms,
+				business_intelligence.search_interactions_base_aux.number_of_bathrooms,
+				business_intelligence.search_interactions_base_aux.accommodation_types,
+				business_intelligence.search_interactions_base_aux.features,
+				business_intelligence.search_interactions_base_aux.suitable_for_erasmus_students,
+				business_intelligence.search_interactions_base_aux.suitable_for_domestic_students,
+				business_intelligence.search_interactions_base_aux.suitable_for_professional_placement,
+				business_intelligence.search_interactions_base_aux.gender_restrictions,
+				business_intelligence.search_interactions_base_aux.occupancy_restrictions,
+				business_intelligence.search_interactions_base_aux.bills_included,
+				business_intelligence.search_results.nbr_results,
+				business_intelligence.search_clicks.nbr_offers_clicked,
+				business_intelligence.search_bookings_info.nbr_requests,
+				business_intelligence.search_bookings_info.nbr_paid_bookings,
+				business_intelligence.search_bookings_info.sum
