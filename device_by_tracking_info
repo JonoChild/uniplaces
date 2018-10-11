@@ -1,0 +1,6 @@
+CREATE VIEW	business_intelligence.device_by_tracking_info AS 
+SELECT			DISTINCT(tracking_id) as tracking_id, 
+				device,
+				device_model	
+FROM			public.upl_touches_v1
+GROUP BY		1,2,3
