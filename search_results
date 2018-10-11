@@ -1,0 +1,8 @@
+CREATE VIEW 	business_intelligence.search_results AS 
+SELECT			search_id,
+				DATE(TIMESTAMP 'epoch' + public.offer_search_results_v1.created_at/1000 * INTERVAL '1 second') as searched_at,
+				COUNT(DISTINCT(offer_id)) as nbr_results
+FROM			public.offer_search_results_v1
+WHERE			DATE(TIMESTAMP 'epoch' + public.offer_search_results_v1.created_at/1000 * INTERVAL '1 second') >= '2018-09-01'
+GROUP BY		search_id,
+				DATE(TIMESTAMP 'epoch' + public.offer_search_results_v1.created_at/1000 * INTERVAL '1 second')
