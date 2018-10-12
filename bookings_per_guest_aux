@@ -19,5 +19,5 @@ SELECT		reporting.guest.id as guest_id,
 FROM		reporting.guest
 LEFT JOIN	reporting.booking
 				ON reporting.booking.guest_id = reporting.guest.id
-WHERE		DATE(reporting.guest.registered_at) = '2018-09-01'
+WHERE		DATE(reporting.guest.registered_at) >= '2018-09-01'
 GROUP BY 1,2,3
