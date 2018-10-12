@@ -1,0 +1,174 @@
+CREATE VIEW business_intelligence.search_interactions_dash AS
+SELECT		search_id,
+			guest_id,
+			device,
+			device_model,
+			country,
+			city,
+			sort_by,
+			searched_at,
+			searched_at_year,
+			searched_at_month,
+			searched_at_week,
+			experiment_id,
+			CASE
+			WHEN free_text_search IS NULL
+			THEN 'no'
+			ELSE 'yes'
+			END AS free_text_search_filter,
+			CASE
+			WHEN move_in IS NULL
+			THEN 'no'
+			ELSE 'yes'
+			END AS move_in_filter,
+			CASE
+			WHEN move_out IS NULL
+			THEN 'no'
+			ELSE 'yes'
+			END AS move_out_filter,
+			CASE
+			WHEN budget_minimum = 0
+			THEN 'no'
+			ELSE 'yes'
+			END AS budget_minimum_filter,
+			CASE
+			WHEN budget_maximum= 250000
+			THEN 'no'
+			ELSE 'yes'
+			END AS budget_maximum_filter,
+			CASE
+			WHEN rent_types = '[]'
+			THEN 'no'
+			ELSE 'yes'
+			END AS rent_types_filter,
+			CASE
+			WHEN accommodation_types = '[]'
+			THEN 'no'
+			ELSE 'yes'
+			END AS accommodation_types_filter,
+			CASE
+			WHEN	features = '[]'
+			THEN 'no'
+			ELSE 'yes'
+			END AS features_filter,
+			CASE
+			WHEN bills_included IS NULL
+			THEN 'no'
+			ELSE 'yes'
+			END AS bills_included_filter,
+			CASE
+			WHEN nbr_results IS NULL
+			THEN 0
+			WHEN nbr_results = 0
+			THEN 0
+			ELSE 1
+			END AS search_w_results,
+			CASE
+			WHEN	nbr_offers_clicked IS NULL
+			THEN 0
+			WHEN nbr_offers_clicked = 0
+			THEN 0
+			ELSE 1
+			END AS search_w_clicks,
+			CASE
+			WHEN nbr_requests IS NULL
+			THEN 0
+			WHEN nbr_requests = 0
+			THEN 0
+			ELSE 1
+			END AS search_w_requests,
+			CASE
+			WHEN nbr_paid_bookings IS NULL
+			THEN 0
+			WHEN nbr_paid_bookings =0
+			THEN 0
+			ELSE 1
+			END AS search_w_bookings,
+			SUM(net_revenue_eur)
+			
+FROM		business_intelligence.search_interactions_base
+GROUP BY	search_id,
+			guest_id,
+			device,
+			device_model,
+			country,
+			city,
+			sort_by,
+			searched_at,
+			searched_at_year,
+			searched_at_month,
+			searched_at_week,
+			experiment_id,
+			CASE
+			WHEN free_text_search IS NULL
+			THEN 'no'
+			ELSE 'yes'
+			END ,
+			CASE
+			WHEN move_in IS NULL
+			THEN 'no'
+			ELSE 'yes'
+			END ,
+			CASE
+			WHEN move_out IS NULL
+			THEN 'no'
+			ELSE 'yes'
+			END ,
+			CASE
+			WHEN budget_minimum = 0
+			THEN 'no'
+			ELSE 'yes'
+			END ,
+			CASE
+			WHEN budget_maximum= 250000
+			THEN 'no'
+			ELSE 'yes'
+			END ,
+			CASE
+			WHEN rent_types = '[]'
+			THEN 'no'
+			ELSE 'yes'
+			END ,
+			CASE
+			WHEN accommodation_types = '[]'
+			THEN 'no'
+			ELSE 'yes'
+			END ,
+			CASE
+			WHEN	features = '[]'
+			THEN 'no'
+			ELSE 'yes'
+			END ,
+			CASE
+			WHEN bills_included IS NULL
+			THEN 'no'
+			ELSE 'yes'
+			END ,
+			CASE
+			WHEN nbr_results IS NULL
+			THEN 0
+			WHEN nbr_results = 0
+			THEN 0
+			ELSE 1
+			END ,
+			CASE
+			WHEN nbr_offers_clicked IS NULL
+			THEN 0
+			WHEN nbr_offers_clicked = 0
+			THEN 0
+			ELSE 1
+			END ,
+			CASE
+			WHEN nbr_requests IS NULL
+			THEN 0
+			WHEN nbr_requests = 0
+			THEN 0
+			ELSE 1
+			END ,
+			CASE
+			WHEN nbr_paid_bookings IS NULL
+			THEN 0
+			WHEN nbr_paid_bookings =0
+			THEN 0
+			ELSE 1
+			END
