@@ -84,7 +84,7 @@ SELECT		search_id,
 			THEN 0
 			ELSE 1
 			END AS search_w_bookings,
-			SUM(net_revenue_eur)
+			SUM(net_revenue_eur) as net_revenue_eur
 			
 FROM		business_intelligence.search_interactions_base
 GROUP BY	search_id,
