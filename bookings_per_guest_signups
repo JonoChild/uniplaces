@@ -1,0 +1,42 @@
+CREATE VIEW 	business_intelligence.bookings_per_guest_signups AS
+SELECT			signup_at,
+				EXTRACT(year from signup_at) as signup_at_year,
+				EXTRACT(month from signup_at) as signup_at_month,
+				week_up as signup_at_week,
+				guest_id,
+				CASE
+				WHEN guest_nbr_requests IS NULL
+				THEN 0
+				WHEN guest_nbr_requests = 0
+				THEN 0
+				ELSE 1
+				END AS guest_with_request,
+				CASE
+				WHEN guest_nbr_paid_bookings IS NULL
+				THEN 0
+				WHEN guest_nbr_paid_bookings = 0
+				THEN 0
+				ELSE 1
+				END AS guest_with_paid_bookings
+FROM			business_intelligence.bookings_per_guest_signups_aux
+LEFT JOIN		main.uniplaces_week
+					ON main.uniplaces_week.date_week = DATE(business_intelligence.bookings_per_guest_signups_aux.signup_at)
+GROUP BY  		signup_at,
+				EXTRACT(year from signup_at),
+				EXTRACT(month from signup_at),
+				week_up,
+				guest_id,
+				CASE
+				WHEN guest_nbr_requests IS NULL
+				THEN 0
+				WHEN guest_nbr_requests = 0
+				THEN 0
+				ELSE 1
+				END ,
+				CASE
+				WHEN guest_nbr_paid_bookings IS NULL
+				THEN 0
+				WHEN guest_nbr_paid_bookings = 0
+				THEN 0
+				ELSE 1
+				END
