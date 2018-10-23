@@ -82,6 +82,7 @@ SELECT			business_intelligence.users_ids.id as user_id,
 			
 			
 				business_intelligence.upl_first_request_info.extra_info as first_request_id,
+				business_intelligence.upl_first_request_info.requested_at as first_request_requested_at,
 				business_intelligence.upl_first_request_info.source as first_request_source,
 				business_intelligence.upl_first_request_info.address_city_code as first_request_city,
 				business_intelligence.upl_first_request_info.medium as first_request_medium,
@@ -110,7 +111,7 @@ LEFT JOIN		business_intelligence.last_nd_touch_by_user
 LEFT JOIN		main.uniplaces_week 
 					ON main.uniplaces_week.date_week = DATE(business_intelligence.users_ids.registered_at)
 WHERE			user_type = 'guest'
-GROUP BY		business_intelligence.users_ids.id ,
+GROUP BY		business_intelligence.users_ids.id , 
 				business_intelligence.users_ids.registered_at,
 				EXTRACT(year from business_intelligence.users_ids.registered_at),
 				main.uniplaces_week.week_up ,
@@ -193,6 +194,7 @@ GROUP BY		business_intelligence.users_ids.id ,
 			
 			
 				business_intelligence.upl_first_request_info.extra_info ,
+				business_intelligence.upl_first_request_info.requested_at,
 				business_intelligence.upl_first_request_info.source ,
 				business_intelligence.upl_first_request_info.address_city_code,
 				business_intelligence.upl_first_request_info.medium,
