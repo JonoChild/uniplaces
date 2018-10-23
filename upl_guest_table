@@ -1,4 +1,4 @@
--- CREATE VIEW 	business_intelligence.upl_guest_table_demand AS
+CREATE VIEW 	business_intelligence.upl_guest_table_demand AS
 SELECT			business_intelligence.users_ids.id as user_id,
 				business_intelligence.users_ids.registered_at,
 				EXTRACT(year from business_intelligence.users_ids.registered_at) as registered_at_year,
@@ -30,53 +30,53 @@ SELECT			business_intelligence.users_ids.id as user_id,
 			
 				CASE 
 				WHEN business_intelligence.last_nd_touch_by_user.created_at IS NULL 
-				THEN business_intelligence.last_touch_by_user.last_creation
+				THEN business_intelligence.first_touch_by_user.first_creation
 				ELSE business_intelligence.last_nd_touch_by_user.created_at
 				END as last_touch_non_direct_at,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.touch_id IS NULL
-				THEN business_intelligence.last_touch_by_user.touch_id
+				THEN business_intelligence.first_touch_by_user.touch_id
 				ELSE business_intelligence.last_nd_touch_by_user.touch_id 
 				END AS last_touch_non_direct_id, 
 
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.city IS NULL
-				THEN business_intelligence.last_touch_by_user.city
+				THEN business_intelligence.first_touch_by_user.city
 				ELSE business_intelligence.last_nd_touch_by_user.city 
 				END AS last_touch_non_direct_city,
 				
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.source IS NULL
-				THEN business_intelligence.last_touch_by_user.source
+				THEN business_intelligence.first_touch_by_user.source
 				ELSE business_intelligence.last_nd_touch_by_user.source 
 				END AS last_touch_non_direct_source,
 				CASE 
-				WHEN business_intelligence.last_nd_touch_by_user.top_line_grouping IS NULL				THEN business_intelligence.last_touch_by_user.top_line_grouping
+				WHEN business_intelligence.last_nd_touch_by_user.top_line_grouping IS NULL				THEN business_intelligence.first_touch_by_user.top_line_grouping
 				ELSE business_intelligence.last_nd_touch_by_user.top_line_grouping 
 				END as last_touch_non_direct_top_line_grouping,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.cost_grouping IS NULL
-				THEN business_intelligence.last_touch_by_user.cost_grouping
+				THEN business_intelligence.first_touch_by_user.cost_grouping
 				ELSE business_intelligence.last_nd_touch_by_user.cost_grouping
 				END AS last_touch_non_direct_cost_grouping,
 				CASE 
 				WHEN business_intelligence.last_nd_touch_by_user.medium IS NULL
-				THEN business_intelligence.last_touch_by_user.medium
+				THEN business_intelligence.first_touch_by_user.medium
 				ELSE business_intelligence.last_nd_touch_by_user.medium 
 				END AS last_touch_non_direct_medium,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.campaign IS NULL
-				THEN business_intelligence.last_touch_by_user.campaign
+				THEN business_intelligence.first_touch_by_user.campaign
 				ELSE business_intelligence.last_nd_touch_by_user.campaign 
 				END AS last_touch_non_direct_campaign,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.camp_name IS NULL
-				THEN  business_intelligence.last_touch_by_user.camp_name
+				THEN  business_intelligence.first_touch_by_user.camp_name
 				ELSE business_intelligence.last_nd_touch_by_user.camp_name 
 				END AS last_touch_non_direct_camp_name,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.gclid IS NULL
-				THEN business_intelligence.last_touch_by_user.gclid
+				THEN business_intelligence.first_touch_by_user.gclid
 				ELSE business_intelligence.last_nd_touch_by_user.gclid 
 				END AS last_touch_non_direct_gclid,
 			
@@ -142,53 +142,53 @@ GROUP BY		business_intelligence.users_ids.id ,
 			
 				CASE 
 				WHEN business_intelligence.last_nd_touch_by_user.created_at IS NULL 
-				THEN business_intelligence.last_touch_by_user.last_creation
+				THEN business_intelligence.first_touch_by_user.first_creation
 				ELSE business_intelligence.last_nd_touch_by_user.created_at
 				END ,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.touch_id IS NULL
-				THEN business_intelligence.last_touch_by_user.touch_id
+				THEN business_intelligence.first_touch_by_user.touch_id
 				ELSE business_intelligence.last_nd_touch_by_user.touch_id 
 				END, 
 
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.city IS NULL
-				THEN business_intelligence.last_touch_by_user.city
+				THEN business_intelligence.first_touch_by_user.city
 				ELSE business_intelligence.last_nd_touch_by_user.city
 				END ,
 				
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.source IS NULL
-				THEN business_intelligence.last_touch_by_user.source
+				THEN business_intelligence.first_touch_by_user.source
 				ELSE business_intelligence.last_nd_touch_by_user.source 
 				END ,
 				CASE 
-				WHEN business_intelligence.last_nd_touch_by_user.top_line_grouping IS NULL				THEN business_intelligence.last_touch_by_user.top_line_grouping
+				WHEN business_intelligence.last_nd_touch_by_user.top_line_grouping IS NULL				THEN business_intelligence.first_touch_by_user.top_line_grouping
 				ELSE business_intelligence.last_nd_touch_by_user.top_line_grouping 
 				END ,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.cost_grouping IS NULL
-				THEN business_intelligence.last_touch_by_user.cost_grouping
+				THEN business_intelligence.first_touch_by_user.cost_grouping
 				ELSE business_intelligence.last_nd_touch_by_user.cost_grouping
 				END ,
 				CASE 
 				WHEN business_intelligence.last_nd_touch_by_user.medium IS NULL
-				THEN business_intelligence.last_touch_by_user.medium
+				THEN business_intelligence.first_touch_by_user.medium
 				ELSE business_intelligence.last_nd_touch_by_user.medium 
 				END ,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.campaign IS NULL
-				THEN business_intelligence.last_touch_by_user.campaign
+				THEN business_intelligence.first_touch_by_user.campaign
 				ELSE business_intelligence.last_nd_touch_by_user.campaign 
 				END ,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.camp_name IS NULL
-				THEN  business_intelligence.last_touch_by_user.camp_name
+				THEN  business_intelligence.first_touch_by_user.camp_name
 				ELSE business_intelligence.last_nd_touch_by_user.camp_name 
 				END ,
 				CASE
 				WHEN business_intelligence.last_nd_touch_by_user.gclid IS NULL
-				THEN business_intelligence.last_touch_by_user.gclid
+				THEN business_intelligence.first_touch_by_user.gclid
 				ELSE business_intelligence.last_nd_touch_by_user.gclid 
 				END,
 			
