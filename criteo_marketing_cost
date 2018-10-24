@@ -1,5 +1,6 @@
 CREATE VIEW 	business_intelligence.criteo_marketing_cost AS
 SELECT			
+				'criteo' as channel,
 				date_1 as date,
 				campaign as campaign,
 				device_1 as device,
