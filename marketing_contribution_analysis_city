@@ -1,4 +1,3 @@
-/* Query executed on 24 October 2018 at 22:42:52 */
 CREATE VIEW	business_intelligence.marketing_contribution_analysis_city AS
 SELECT			DATE(requested_at),
 				week,
@@ -13,8 +12,7 @@ SELECT			DATE(requested_at),
 				THEN 1
 				ELSE 0
 				END) as paid_bookings,
-				sum(net_renevue_eur) as net_revenue_eur,
-				sum(business_intelligence.marketing_cost_city.sum)
+				sum(net_renevue_eur) as net_revenue_eur
 				
 FROM			business_intelligence.requests_weekly_by_source
 LEFT JOIN		business_intelligence.marketing_cost_city
