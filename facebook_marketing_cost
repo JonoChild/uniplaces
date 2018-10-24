@@ -1,5 +1,6 @@
 CREATE VIEW 	business_intelligence.facebook_marketing_cost AS
 SELECT			
+				'facebook' as channel,
 				date_1 as date,
 				campaign_name_1 as campaign,
 				device_platform as device,
