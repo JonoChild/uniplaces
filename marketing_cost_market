@@ -1,4 +1,4 @@
-CREATE VIEW	business_intelligence.marketing_cost_country AS
+CREATE VIEW	business_intelligence.marketing_cost_market AS
 SELECT		DATE(date) as date,
 			destination_country,
 			channel,
