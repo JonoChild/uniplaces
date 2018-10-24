@@ -8,3 +8,4 @@ SELECT
 				cost__eur_ as cost
 FROM		alooma.marketing_costs
 WHERE		_metadata_file_name = 'Adwords Cost BI/bing_cost'
+		AND date_1 IS NOT NULL
