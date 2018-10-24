@@ -1,0 +1,11 @@
+CREATE VIEW 	business_intelligence.facebook_marketing_cost AS
+SELECT			
+				date_1 as date,
+				campaign_name_1 as campaign,
+				device_platform as device,
+				destination_city,
+				destination_country,
+				amount_spent__eur_ as cost
+FROM		alooma.marketing_costs
+WHERE		_metadata_file_name = 'Adwords Cost BI/Facebook_cost'
+		AND date_1 IS NOT NULL
