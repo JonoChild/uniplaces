@@ -1,7 +1,6 @@
-
 CREATE VIEW 	business_intelligence.adwords_marketing_cost AS
 SELECT			
-				'adwords' as channel,
+				'Google Adwords' as channel,
 				date_1 as date,
 				campaign_name_1 as campaign,
 				device_1 as device,
