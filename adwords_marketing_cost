@@ -1,0 +1,10 @@
+CREATE VIEW 	business_intelligence.adwords_marketing_cost AS
+SELECT			
+				date_1 as date,
+				campaign_name_1 as campaign,
+				device_1 as device,
+				destination_city,
+				destination_country,
+				cost_1 as cost
+FROM		alooma.marketing_costs
+WHERE		_metadata_file_name = 'Adwords Cost BI/Adwords_cost'
