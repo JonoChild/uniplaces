@@ -1,4 +1,4 @@
-CREATE VIEW	business_intelligence.contribution_analysis_city AS
+CREATE VIEW	business_intelligence.marketing_contribution_analysis_city AS
 SELECT			DATE(requested_at),
 				week,
 				city,
