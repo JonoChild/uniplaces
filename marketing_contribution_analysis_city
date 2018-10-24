@@ -16,7 +16,7 @@ SELECT			DATE(requested_at),
 				
 FROM			business_intelligence.requests_weekly_by_source
 LEFT JOIN		business_intelligence.marketing_cost_city
-				ON business_intelligence.marketing_cost_city.date =  DATE(business_intelligence.requests_weekly_by_source.rejected_at) 
+				ON business_intelligence.marketing_cost_city.date =  DATE(business_intelligence.requests_weekly_by_source.requested_at) 
 				AND
 				business_intelligence.marketing_cost_city.channel =  business_intelligence.requests_weekly_by_source.top_line_grouping
 				AND 
