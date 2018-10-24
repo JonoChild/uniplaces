@@ -1,0 +1,27 @@
+CREATE VIEW	business_intelligence.contribution_analysis_city AS
+SELECT			DATE(requested_at),
+				week,
+				city,
+				top_line_grouping,
+				COUNT(DISTINCT(booking_id)) as requests,
+				COUNT(DISTINCT(guest_id)) as nbr_guests,
+				SUM(
+				CASE
+				WHEN paid_at IS NOT NULL
+				THEN 1
+				ELSE 0
+				END) as paid_bookings,
+				sum(net_renevue_eur) as net_revenue_eur,
+				sum(business_intelligence.marketing_cost_city.sum)
+				
+FROM			business_intelligence.requests_weekly_by_source
+LEFT JOIN		business_intelligence.marketing_cost_city
+				ON business_intelligence.marketing_cost_city.date =  DATE(business_intelligence.requests_weekly_by_source.rejected_at) 
+				AND
+				business_intelligence.marketing_cost_city.channel =  business_intelligence.requests_weekly_by_source.top_line_grouping
+				AND 
+				business_intelligence.marketing_cost_city.destination_city =  business_intelligence.requests_weekly_by_source.city
+GROUP BY		DATE(requested_at),
+				week,
+				city,
+				top_line_grouping
