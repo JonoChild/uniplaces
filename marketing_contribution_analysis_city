@@ -1,3 +1,4 @@
+/* Query executed on 24 October 2018 at 22:42:52 */
 CREATE VIEW	business_intelligence.marketing_contribution_analysis_city AS
 SELECT			DATE(requested_at),
 				week,
