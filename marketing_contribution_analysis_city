@@ -3,6 +3,7 @@ SELECT			DATE(requested_at),
 				week,
 				city,
 				top_line_grouping,
+				business_intelligence.marketing_cost_city.sum as cost,
 				COUNT(DISTINCT(booking_id)) as requests,
 				COUNT(DISTINCT(guest_id)) as nbr_guests,
 				SUM(
@@ -24,4 +25,5 @@ LEFT JOIN		business_intelligence.marketing_cost_city
 GROUP BY		DATE(requested_at),
 				week,
 				city,
-				top_line_grouping
+				top_line_grouping,
+				business_intelligence.marketing_cost_city.sum
