@@ -3,6 +3,7 @@ SELECT			DATE(requested_at),
 				week,
 				market,
 				top_line_grouping,
+				business_intelligence.marketing_cost_market.sum as cost,
 				COUNT(DISTINCT(booking_id)) as requests,
 				COUNT(DISTINCT(guest_id)) as nbr_guests,
 				SUM(
@@ -11,17 +12,17 @@ SELECT			DATE(requested_at),
 				THEN 1
 				ELSE 0
 				END) as paid_bookings,
-				sum(net_renevue_eur) as net_revenue_eur,
-				sum(business_intelligence.marketing_cost_market.sum)
+				sum(net_renevue_eur) as net_revenue_eur
 				
 FROM			business_intelligence.requests_weekly_by_source
 LEFT JOIN		business_intelligence.marketing_cost_market
-				ON business_intelligence.marketing_cost_market.date =  DATE(business_intelligence.requests_weekly_by_source.rejected_at) 
+				ON business_intelligence.marketing_cost_market.date =  DATE(business_intelligence.requests_weekly_by_source.requested_at) 
 				AND
 				business_intelligence.marketing_cost_market.channel =  business_intelligence.requests_weekly_by_source.top_line_grouping
 				AND 
-				business_intelligence.marketing_cost_market.destination_country=  business_intelligence.requests_weekly_by_source.city
+				business_intelligence.marketing_cost_market.destination_country=  business_intelligence.requests_weekly_by_source.market
 GROUP BY		DATE(requested_at),
 				week,
 				market,
-				top_line_grouping
+				top_line_grouping,
+				business_intelligence.marketing_cost_market.sum
