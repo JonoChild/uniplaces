@@ -1,6 +1,6 @@
 CREATE VIEW 	business_intelligence.bing_marketing_cost AS
 SELECT			
-				'bing' as channel,
+				'Bing' as channel,
 				date_1 as date,
 				campaign_name_1 as campaign,
 				device_type as device,
