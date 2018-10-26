@@ -1,5 +1,5 @@
 CREATE VIEW	business_intelligence.marketing_contribution_analysis_market AS
-SELECT			DATE(requested_at),
+SELECT			requested_at,
 				week,
 				market,
 				top_line_grouping,
@@ -21,7 +21,7 @@ LEFT JOIN		business_intelligence.marketing_cost_market
 				business_intelligence.marketing_cost_market.channel =  business_intelligence.requests_weekly_by_source.top_line_grouping
 				AND 
 				business_intelligence.marketing_cost_market.destination_country=  business_intelligence.requests_weekly_by_source.market
-GROUP BY		DATE(requested_at),
+GROUP BY		requested_at,
 				week,
 				market,
 				top_line_grouping,
