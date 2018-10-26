@@ -1,9 +1,9 @@
 CREATE VIEW	business_intelligence.marketing_cost_city AS
-SELECT		DATE(date) as date,
+SELECT		date as date,
 			destination_city,
 			channel,
 			sum(cost)
 FROM		business_intelligence.marketing_costs
-GROUP BY	DATE(date),
+GROUP BY	date,
 			destination_city,
 			channel
