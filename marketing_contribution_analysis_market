@@ -1,5 +1,5 @@
 CREATE VIEW	business_intelligence.marketing_contribution_analysis_market AS
-SELECT			requested_at,
+SELECT			requested_at as date,
 				week,
 				market,
 				top_line_grouping,
