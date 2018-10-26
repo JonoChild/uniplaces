@@ -1,5 +1,5 @@
 CREATE VIEW	business_intelligence.marketing_contribution_analysis_city AS
-SELECT			DATE(requested_at),
+SELECT			requested_at,
 				week,
 				city,
 				top_line_grouping,
@@ -21,7 +21,7 @@ LEFT JOIN		business_intelligence.marketing_cost_city
 				business_intelligence.marketing_cost_city.channel =  business_intelligence.requests_weekly_by_source.top_line_grouping
 				AND 
 				business_intelligence.marketing_cost_city.destination_city =  business_intelligence.requests_weekly_by_source.city
-GROUP BY		DATE(requested_at),
+GROUP BY		requested_at,
 				week,
 				city,
 				top_line_grouping,
