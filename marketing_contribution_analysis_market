@@ -12,7 +12,8 @@ SELECT			DATE(requested_at) as date,
 				THEN 1
 				ELSE 0
 				END) as paid_bookings,
-				sum(net_renevue_eur) as net_revenue_eur
+				sum(net_renevue_eur) as net_revenue_eur,
+				sum(net_renevue_eur) - business_intelligence.marketing_cost_market.sum as contribution
 				
 FROM			business_intelligence.requests_weekly_by_source
 LEFT JOIN		business_intelligence.marketing_cost_market
