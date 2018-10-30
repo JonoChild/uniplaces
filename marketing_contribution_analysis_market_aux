@@ -1,9 +1,13 @@
-CREATE VIEW	business_intelligence.marketing_contribution_analysis_market AS
+CREATE VIEW	 business_intelligence.marketing_contribution_analysis_market_aux AS
 SELECT			DATE(requested_at) as date,
 				week,
 				market,
 				top_line_grouping,
-				business_intelligence.marketing_cost_market.sum as cost,
+				CASE
+				WHEN business_intelligence.marketing_cost_market.sum IS NULL
+				THEN 0
+				ELSE business_intelligence.marketing_cost_market.sum
+				END as cost,
 				COUNT(DISTINCT(booking_id)) as requests,
 				COUNT(DISTINCT(guest_id)) as nbr_guests,
 				SUM(
@@ -12,9 +16,11 @@ SELECT			DATE(requested_at) as date,
 				THEN 1
 				ELSE 0
 				END) as paid_bookings,
-				sum(net_renevue_eur) as net_revenue_eur,
-				sum(net_renevue_eur) - business_intelligence.marketing_cost_market.sum as contribution
-				
+				CASE
+				WHEN sum(net_renevue_eur)  IS NULL
+				THEN 0
+				ELSE sum(net_renevue_eur) 
+				END as net_revenue_eur
 FROM			business_intelligence.requests_weekly_by_source
 LEFT JOIN		business_intelligence.marketing_cost_market
 				ON business_intelligence.marketing_cost_market.date =  DATE(business_intelligence.requests_weekly_by_source.requested_at) 
@@ -26,4 +32,8 @@ GROUP BY		DATE(requested_at),
 				week,
 				market,
 				top_line_grouping,
-				business_intelligence.marketing_cost_market.sum
+				CASE
+				WHEN business_intelligence.marketing_cost_market.sum IS NULL
+				THEN 0
+				ELSE business_intelligence.marketing_cost_market.sum
+				END
