@@ -1,0 +1,12 @@
+CREATE VIEW 	business_intelligence.marketing_contribution_analysis_market AS
+SELECT			date,
+				split_part(REPLACE (date,'-',''), ' ', 1) as date_dash,
+				week,
+				top_line_grouping,
+				requests,
+				nbr_guests,
+				paid_bookings,
+				net_revenue_eur,
+				cost,
+				net_revenue_eur - cost as contribution
+FROM			business_intelligence.marketing_contribution_analysis_market_aux
