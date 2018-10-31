@@ -1,0 +1,14 @@
+CREATE VIEW business_intelligence.requests_weekly_by_source_dash AS
+SELECT		DATE(requested_at) as date,
+			split_part(REPLACE (requested_at,'-',''), ' ', 1) as date_dash,
+			market,
+			guest_nd_touch_top_line_grouping,
+			top_line_grouping as request_channel,
+			COUNT(DISTINCT(guest_id)) as nbr_guest,
+			COUNT(DISTINCT(booking_id)) as requests
+FROM		business_intelligence.requests_weekly_by_source
+GROUP BY	DATE(requested_at),
+			split_part(REPLACE (requested_at,'-',''), ' ', 1),
+			market,
+			guest_nd_touch_top_line_grouping,
+			top_line_grouping
