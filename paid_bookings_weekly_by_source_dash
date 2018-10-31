@@ -6,7 +6,7 @@ SELECT		DATE(paid_at) as date,
 			top_line_grouping as booking_channel,
 			COUNT(DISTINCT(guest_id)) as nbr_guest,
 			COUNT(DISTINCT(booking_id)) as paid_booking
-FROM		business_intelligence.requests_weekly_by_source
+FROM		business_intelligence.paid_bookings_weekly_by_source
 GROUP BY	DATE(paid_at),
 			split_part(REPLACE (paid_at,'-',''), ' ', 1),
 			LEFT(city,2),
