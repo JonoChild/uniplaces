@@ -1,0 +1,18 @@
+CREATE VIEW 	business_intelligence.upl_model_first_touch_dash AS
+SELECT			registered_at as date,
+				split_part(REPLACE (registered_at,'-',''), ' ', 1) as date_dash,
+				LEFT(registration_city,2) as market,
+				first_touch_top_line_grouping,
+				COUNT(DISTINCT(user_id)) as users,
+				COUNT(DISTINCT(first_request_id)) as requests,
+				COUNT(DISTINCT(first_paid_booking_id)) as paid_bookings,
+				CASE
+				WHEN SUM(first_paid_booking_net_revenue) IS NULL
+				THEN 0
+				ELSE SUM(first_paid_booking_net_revenue)
+				END AS net_revenue
+FROM			business_intelligence.upl_guest_table_demand
+GROUP BY		registered_at,
+				split_part(REPLACE (registered_at,'-',''), ' ', 1),
+				LEFT(registration_city,2),
+				first_touch_top_line_grouping
