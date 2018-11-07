@@ -13,6 +13,8 @@ SELECT			public.offer_search_v1.search_id,
 				public.offer_search_v1.free_text_search,
 				CASE
 				WHEN public.offer_search_v1.free_text_search IS NULL				THEN 0
+				WHEN public.offer_search_v1.free_text_search = ''
+				THEN 0
 				ELSE 1
 				END AS filter_free_text_search,
 				public.offer_search_v1.move_in,
@@ -43,11 +45,15 @@ SELECT			public.offer_search_v1.search_id,
 				CASE
 				WHEN public.offer_search_v1.rent_types = '[]'
 				THEN 0
+				WHEN public.offer_search_v1.rent_types IS NULL
+				THEN 0
 				ELSE 1
 				END AS filter_rent_types,
 				public.offer_search_v1.number_of_bedrooms,
 				CASE
 				WHEN public.offer_search_v1.number_of_bedrooms = '["0"]'
+				THEN 0
+				WHEN public.offer_search_v1.number_of_bedrooms IS NULL
 				THEN 0
 				ELSE 1
 				END AS filter_number_of_bedrooms,
@@ -55,17 +61,23 @@ SELECT			public.offer_search_v1.search_id,
 				CASE
 				WHEN public.offer_search_v1.number_of_bathrooms = '["0"]'
 				THEN 0
+				WHEN public.offer_search_v1.number_of_bathrooms IS NULL
+				THEN 0
 				ELSE 1
 				END AS filter_number_of_bathrooms,
 				public.offer_search_v1.accommodation_types,
 				CASE
 				WHEN public.offer_search_v1.accommodation_types =  '[]'
 				THEN 0
+				WHEN public.offer_search_v1.accommodation_types IS NULL
+				THEN 0
 				ELSE 1
 				END AS filter_accommodation_types,
 				public.offer_search_v1.features,
 				CASE
 				WHEN public.offer_search_v1.features = '[]'
+				THEN 0
+				WHEN public.offer_search_v1.features IS NULL
 				THEN 0
 				ELSE 1
 				END AS filter_features,
@@ -83,7 +95,7 @@ SELECT			public.offer_search_v1.search_id,
 				END AS filter_suitable_for_domestic_students,
 				public.offer_search_v1.suitable_for_professional_placement,
 				CASE
-				WHEN offer_search_v1.suitable_for_professional_placement = 'False'
+				WHEN offer_search_v1.suitable_for_professional_placement IS NULL
 				THEN 0
 				ELSE 1
 				END AS filter_suitable_for_professional_placement,
@@ -91,11 +103,15 @@ SELECT			public.offer_search_v1.search_id,
 				CASE
 				WHEN public.offer_search_v1.gender_restrictions = '[]'
 				THEN 0
+				WHEN public.offer_search_v1.gender_restrictions IS NULL
+				THEN 0
 				ELSE 1
 				END AS filter_gender_restrictions,
 				public.offer_search_v1.occupancy_restrictions,
 				CASE
 				WHEN public.offer_search_v1.occupancy_restrictions = '[]'
+				THEN 0
+				WHEN public.offer_search_v1.occupancy_restrictions IS NULL
 				THEN 0
 				ELSE 1
 				END AS filter_occupancy_restrictions,
@@ -114,16 +130,18 @@ GROUP BY 		public.offer_search_v1.search_id,
 				public.offer_search_v1.country,
 				public.offer_search_v1.city,
 				public.offer_search_v1.sort_by,
-				DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second') ,
-				EXTRACT(year from DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second')) ,
+				DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second'),
+				EXTRACT(year from DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second')),
 				EXTRACT(month from DATE(TIMESTAMP 'epoch' + public.offer_search_v1.created_at/1000 * INTERVAL '1 second')),
-				main.uniplaces_week.week_up ,
+				main.uniplaces_week.week_up,
 				public.offer_search_v1.experiment_id,
 				public.offer_search_v1.free_text_search,
 				CASE
 				WHEN public.offer_search_v1.free_text_search IS NULL				THEN 0
+				WHEN public.offer_search_v1.free_text_search = ''
+				THEN 0
 				ELSE 1
-				END,
+				END ,
 				public.offer_search_v1.move_in,
 				CASE
 				WHEN public.offer_search_v1.move_in IS NULL
@@ -147,10 +165,12 @@ GROUP BY 		public.offer_search_v1.search_id,
 				WHEN public.offer_search_v1.budget_maximum = 250000
 				THEN 0
 				ELSE 1
-				END,
+				END ,
 				public.offer_search_v1.rent_types,
 				CASE
 				WHEN public.offer_search_v1.rent_types = '[]'
+				THEN 0
+				WHEN public.offer_search_v1.rent_types IS NULL
 				THEN 0
 				ELSE 1
 				END ,
@@ -158,23 +178,31 @@ GROUP BY 		public.offer_search_v1.search_id,
 				CASE
 				WHEN public.offer_search_v1.number_of_bedrooms = '["0"]'
 				THEN 0
+				WHEN public.offer_search_v1.number_of_bedrooms IS NULL
+				THEN 0
 				ELSE 1
 				END ,
 				public.offer_search_v1.number_of_bathrooms,
 				CASE
 				WHEN public.offer_search_v1.number_of_bathrooms = '["0"]'
 				THEN 0
+				WHEN public.offer_search_v1.number_of_bathrooms IS NULL
+				THEN 0
 				ELSE 1
-				END ,
+				END,
 				public.offer_search_v1.accommodation_types,
 				CASE
 				WHEN public.offer_search_v1.accommodation_types =  '[]'
 				THEN 0
+				WHEN public.offer_search_v1.accommodation_types IS NULL
+				THEN 0
 				ELSE 1
-				END ,
+				END,
 				public.offer_search_v1.features,
 				CASE
 				WHEN public.offer_search_v1.features = '[]'
+				THEN 0
+				WHEN public.offer_search_v1.features IS NULL
 				THEN 0
 				ELSE 1
 				END ,
@@ -189,22 +217,26 @@ GROUP BY 		public.offer_search_v1.search_id,
 				WHEN public.offer_search_v1.suitable_for_domestic_students IS NULL
 				THEN 0
 				ELSE 1
-				END ,
+				END,
 				public.offer_search_v1.suitable_for_professional_placement,
 				CASE
-				WHEN offer_search_v1.suitable_for_professional_placement = 'False'
+				WHEN offer_search_v1.suitable_for_professional_placement IS NULL
 				THEN 0
 				ELSE 1
-				END,
+				END ,
 				public.offer_search_v1.gender_restrictions,
 				CASE
 				WHEN public.offer_search_v1.gender_restrictions = '[]'
+				THEN 0
+				WHEN public.offer_search_v1.gender_restrictions IS NULL
 				THEN 0
 				ELSE 1
 				END ,
 				public.offer_search_v1.occupancy_restrictions,
 				CASE
 				WHEN public.offer_search_v1.occupancy_restrictions = '[]'
+				THEN 0
+				WHEN public.offer_search_v1.occupancy_restrictions IS NULL
 				THEN 0
 				ELSE 1
 				END ,
