@@ -15,7 +15,7 @@ SELECT			search_id,
 				WHEN paid_at IS NOT NULL
 				THEN 1
 				END ) as nbr_paid_bookings,
-				sum(net_revenue_eur)	
+				sum(net_revenue_eur)	as net_revenue_eur
 FROM			business_intelligence.search_bookings_base
 GROUP BY 		search_id,
 				guest_id,
