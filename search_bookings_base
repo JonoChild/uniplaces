@@ -4,6 +4,8 @@ SELECT		public.offer_search_click_v1.search_id,
 			DATE(TIMESTAMP 'epoch' + public.offer_search_click_v1.created_at/1000 * INTERVAL '1 second') as clicked_at,
 			public.offer_search_click_v1.offer_id,
 			reporting.booking.id as booking_id,
+			reporting.booking.current_state as booking_status,
+			DATE(reporting.booking.accepted_at) as accepted_at,
 			DATE(reporting.booking.paid_at) as paid_at,
 			SUM(reporting.transactions.money_value)/100 as net_revenue_eur
 FROM		public.offer_search_click_v1
@@ -21,4 +23,6 @@ GROUP BY 	public.offer_search_click_v1.search_id,
 			DATE(TIMESTAMP 'epoch' + public.offer_search_click_v1.created_at/1000 * INTERVAL '1 second'),
 			public.offer_search_click_v1.offer_id,
 			reporting.booking.id,
+			reporting.booking.current_state,
+			DATE(reporting.booking.accepted_at),
 			DATE(reporting.booking.paid_at)
