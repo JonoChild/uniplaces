@@ -1,5 +1,6 @@
 CREATE VIEW 	business_intelligence.search_bookings_base_overview AS
 SELECT			search_id,
+				1,
 				guest_id,
 				clicked_at,
 				COUNT(DISTINCT(booking_id)) as nbr_requests,
@@ -18,8 +19,6 @@ SELECT			search_id,
 				sum(net_revenue_eur)	as net_revenue_eur
 FROM			business_intelligence.search_bookings_base
 GROUP BY 		search_id,
+				1,
 				guest_id,
 				clicked_at
-		
-		
-;
