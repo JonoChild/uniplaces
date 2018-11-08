@@ -97,6 +97,8 @@ SELECT			public.offer_search_v1.search_id,
 				CASE
 				WHEN offer_search_v1.suitable_for_professional_placement IS NULL
 				THEN 0
+				WHEN offer_search_v1.suitable_for_professional_placement = 'FALSE'
+				THEN 0
 				ELSE 1
 				END AS filter_suitable_for_professional_placement,
 				public.offer_search_v1.gender_restrictions,
@@ -221,6 +223,8 @@ GROUP BY 		public.offer_search_v1.search_id,
 				public.offer_search_v1.suitable_for_professional_placement,
 				CASE
 				WHEN offer_search_v1.suitable_for_professional_placement IS NULL
+				THEN 0
+				WHEN offer_search_v1.suitable_for_professional_placement = 'FALSE'
 				THEN 0
 				ELSE 1
 				END ,
