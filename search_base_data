@@ -55,7 +55,7 @@ SELECT		business_intelligence.search_info_base_aux.search_id,
 			ELSE 	1
 			END AS search_w_clicks,
 			CASE
-			WHEN	business_intelligence.search_bookings_base_overview.nbr_accepted_bookings IS NULL
+			WHEN	business_intelligence.search_bookings_base_overview.request IS NULL
 			THEN 	0
 			ELSE 	1
 			END AS search_w_booking_request,
@@ -139,7 +139,7 @@ GROUP BY 	business_intelligence.search_info_base_aux.search_id,
 			ELSE 	1
 			END ,
 			CASE
-			WHEN	business_intelligence.search_bookings_base_overview.nbr_accepted_bookings IS NULL
+			WHEN	business_intelligence.search_bookings_base_overview.request IS NULL
 			THEN 	0
 			ELSE 	1
 			END ,
