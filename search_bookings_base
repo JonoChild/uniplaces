@@ -1,28 +1,166 @@
-CREATE VIEW business_intelligence.search_bookings_base AS 
-SELECT		public.offer_search_click_v1.search_id,
-			public.offer_search_v1.guest_id,
-			DATE(TIMESTAMP 'epoch' + public.offer_search_click_v1.created_at/1000 * INTERVAL '1 second') as clicked_at,
-			public.offer_search_click_v1.offer_id,
-			reporting.booking.id as booking_id,
-			reporting.booking.current_state as booking_status,
-			DATE(reporting.booking.accepted_at) as accepted_at,
-			DATE(reporting.booking.paid_at) as paid_at,
-			SUM(reporting.transactions.money_value)/100 as net_revenue_eur
-FROM		public.offer_search_click_v1
-LEFT JOIN	public.offer_search_v1 
-				ON public.offer_search_v1.search_id =  public.offer_search_click_v1.search_id
-LEFT JOIN	reporting.booking
-				ON 	reporting.booking.offer_id = public.offer_search_click_v1.offer_id
-				AND reporting.booking.guest_id = public.offer_search_v1.guest_id
-				AND DATE(reporting.booking.requested_at) = DATE(TIMESTAMP 'epoch' + public.offer_search_click_v1.created_at/1000 * INTERVAL '1 second')
-LEFT JOIN	reporting.transactions
-				ON reporting.booking.id = reporting.transactions.booking_id
-WHERE		public.offer_search_click_v1.event_name = 'guest_click_offer'
-GROUP BY 	public.offer_search_click_v1.search_id,
-			public.offer_search_v1.guest_id,
-			DATE(TIMESTAMP 'epoch' + public.offer_search_click_v1.created_at/1000 * INTERVAL '1 second'),
-			public.offer_search_click_v1.offer_id,
-			reporting.booking.id,
-			reporting.booking.current_state,
-			DATE(reporting.booking.accepted_at),
-			DATE(reporting.booking.paid_at)
+CREATE VIEW  	business_intelligence.search_base_data AS
+SELECT		business_intelligence.search_info_base_aux.search_id,
+			business_intelligence.search_info_base_aux.guest_id,
+			business_intelligence.search_info_base_aux.tracking_id,
+			business_intelligence.search_info_base_aux.country,
+			business_intelligence.search_info_base_aux.city,
+			business_intelligence.search_info_base_aux.sort_by,
+			business_intelligence.search_info_base_aux.searched_at,
+			business_intelligence.search_info_base_aux.searched_at_year,
+			business_intelligence.search_info_base_aux.searched_at_month,
+			business_intelligence.search_info_base_aux.searched_at_week,
+			business_intelligence.search_info_base_aux.experiment_id,
+			CASE
+			WHEN	(filter_free_text_search + filter_move_in + filter_move_out + filter_budget_minimum + filter_budget_maximum + filter_rent_types + filter_number_of_bedrooms + filter_number_of_bathrooms + filter_accommodation_types + filter_features + filter_suitable_for_erasmus_students + filter_suitable_for_domestic_students + filter_suitable_for_professional_placement + filter_gender_restrictions + filter_occupancy_restrictions + filter_bills_included) = 0
+			THEN 0
+			ELSE 1
+			END AS search_w_filters,
+			business_intelligence.search_info_base_aux.free_text_search,
+			business_intelligence.search_info_base_aux.filter_free_text_search,
+			business_intelligence.search_info_base_aux.move_in,
+			business_intelligence.search_info_base_aux.filter_move_in,
+			business_intelligence.search_info_base_aux.move_out,
+			business_intelligence.search_info_base_aux.filter_move_out,
+			business_intelligence.search_info_base_aux.budget_minimum,
+			business_intelligence.search_info_base_aux.filter_budget_minimum,
+			business_intelligence.search_info_base_aux.budget_maximum,
+			business_intelligence.search_info_base_aux.filter_budget_maximum,
+			business_intelligence.search_info_base_aux.rent_types,
+			business_intelligence.search_info_base_aux.filter_rent_types,
+			business_intelligence.search_info_base_aux.number_of_bedrooms,
+			business_intelligence.search_info_base_aux.filter_number_of_bedrooms,
+			business_intelligence.search_info_base_aux.number_of_bathrooms,
+			business_intelligence.search_info_base_aux.filter_number_of_bathrooms,
+			business_intelligence.search_info_base_aux.accommodation_types,
+			business_intelligence.search_info_base_aux.filter_accommodation_types,
+			business_intelligence.search_info_base_aux.features,
+			business_intelligence.search_info_base_aux.filter_features,
+			business_intelligence.search_info_base_aux.suitable_for_erasmus_students,
+			business_intelligence.search_info_base_aux.filter_suitable_for_erasmus_students,
+			business_intelligence.search_info_base_aux.suitable_for_domestic_students,
+			business_intelligence.search_info_base_aux.filter_suitable_for_domestic_students,
+			business_intelligence.search_info_base_aux.suitable_for_professional_placement,
+			business_intelligence.search_info_base_aux.filter_suitable_for_professional_placement,
+			business_intelligence.search_info_base_aux.gender_restrictions,
+			business_intelligence.search_info_base_aux.filter_gender_restrictions,
+			business_intelligence.search_info_base_aux.occupancy_restrictions,
+			business_intelligence.search_info_base_aux.filter_occupancy_restrictions,
+			business_intelligence.search_info_base_aux.bills_included,
+			business_intelligence.search_info_base_aux.filter_bills_included,
+			business_intelligence.search_results_base.nbr_results,
+			business_intelligence.search_clicks_base.nbr_offers_clicked,
+			CASE
+			WHEN	business_intelligence.search_clicks_base.nbr_offers_clicked IS NULL
+			THEN 	0
+			ELSE 	1
+			END AS search_w_clicks,
+			CASE
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_requests IS NULL
+			THEN 	0
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_requests = 0
+			THEN 	0
+			ELSE 	1
+			END AS search_w_booking_request,
+			business_intelligence.search_bookings_base_overview.nbr_accepted_bookings,
+			CASE
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_accepted_bookings = 0
+			THEN 	0
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_accepted_bookings IS NULL
+			THEN 	0
+			ELSE 	1
+			END AS search_w_booking_accepted,
+			business_intelligence.search_bookings_base_overview.nbr_paid_bookings,
+			CASE
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_paid_bookings = 0
+			THEN	0
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_paid_bookings IS NULL
+			THEN	0
+			ELSE 	1
+			END AS search_w_booking_paid,
+			business_intelligence.search_bookings_base_overview.net_revenue_eur
+FROM		business_intelligence.search_info_base_aux
+LEFT JOIN	business_intelligence.search_clicks_base 
+				ON business_intelligence.search_clicks_base.search_id =  business_intelligence.search_info_base_aux.search_id
+LEFT JOIN	business_intelligence.search_bookings_base_overview
+				ON business_intelligence.search_bookings_base_overview.search_id =  business_intelligence.search_info_base_aux.search_id
+LEFT JOIN	business_intelligence.search_results_base
+			ON business_intelligence.search_results_base.search_id = business_intelligence.search_info_base_aux.search_id
+GROUP BY 	business_intelligence.search_info_base_aux.search_id,
+			business_intelligence.search_info_base_aux.guest_id,
+			business_intelligence.search_info_base_aux.tracking_id,
+			business_intelligence.search_info_base_aux.country,
+			business_intelligence.search_info_base_aux.city,
+			business_intelligence.search_info_base_aux.sort_by,
+			business_intelligence.search_info_base_aux.searched_at,
+			business_intelligence.search_info_base_aux.searched_at_year,
+			business_intelligence.search_info_base_aux.searched_at_month,
+			business_intelligence.search_info_base_aux.searched_at_week,
+			business_intelligence.search_info_base_aux.experiment_id,
+			CASE
+			WHEN	(filter_free_text_search + filter_move_in + filter_move_out + filter_budget_minimum + filter_budget_maximum + filter_rent_types + filter_number_of_bedrooms + filter_number_of_bathrooms + filter_accommodation_types + filter_features + filter_suitable_for_erasmus_students + filter_suitable_for_domestic_students + filter_suitable_for_professional_placement + filter_gender_restrictions + filter_occupancy_restrictions + filter_bills_included) = 0
+			THEN 0
+			ELSE 1
+			END,
+			business_intelligence.search_info_base_aux.free_text_search,
+			business_intelligence.search_info_base_aux.filter_free_text_search,
+			business_intelligence.search_info_base_aux.move_in,
+			business_intelligence.search_info_base_aux.filter_move_in,
+			business_intelligence.search_info_base_aux.move_out,
+			business_intelligence.search_info_base_aux.filter_move_out,
+			business_intelligence.search_info_base_aux.budget_minimum,
+			business_intelligence.search_info_base_aux.filter_budget_minimum,
+			business_intelligence.search_info_base_aux.budget_maximum,
+			business_intelligence.search_info_base_aux.filter_budget_maximum,
+			business_intelligence.search_info_base_aux.rent_types,
+			business_intelligence.search_info_base_aux.filter_rent_types,
+			business_intelligence.search_info_base_aux.number_of_bedrooms,
+			business_intelligence.search_info_base_aux.filter_number_of_bedrooms,
+			business_intelligence.search_info_base_aux.number_of_bathrooms,
+			business_intelligence.search_info_base_aux.filter_number_of_bathrooms,
+			business_intelligence.search_info_base_aux.accommodation_types,
+			business_intelligence.search_info_base_aux.filter_accommodation_types,
+			business_intelligence.search_info_base_aux.features,
+			business_intelligence.search_info_base_aux.filter_features,
+			business_intelligence.search_info_base_aux.suitable_for_erasmus_students,
+			business_intelligence.search_info_base_aux.filter_suitable_for_erasmus_students,
+			business_intelligence.search_info_base_aux.suitable_for_domestic_students,
+			business_intelligence.search_info_base_aux.filter_suitable_for_domestic_students,
+			business_intelligence.search_info_base_aux.suitable_for_professional_placement,
+			business_intelligence.search_info_base_aux.filter_suitable_for_professional_placement,
+			business_intelligence.search_info_base_aux.gender_restrictions,
+			business_intelligence.search_info_base_aux.filter_gender_restrictions,
+			business_intelligence.search_info_base_aux.occupancy_restrictions,
+			business_intelligence.search_info_base_aux.filter_occupancy_restrictions,
+			business_intelligence.search_info_base_aux.bills_included,
+			business_intelligence.search_info_base_aux.filter_bills_included,
+			business_intelligence.search_results_base.nbr_results,
+			business_intelligence.search_clicks_base.nbr_offers_clicked,
+			CASE
+			WHEN	business_intelligence.search_clicks_base.nbr_offers_clicked IS NULL
+			THEN 	0
+			ELSE 	1
+			END ,
+			CASE
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_requests IS NULL
+			THEN 	0
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_requests = 0
+			THEN 	0
+			ELSE 	1
+			END,
+			business_intelligence.search_bookings_base_overview.nbr_accepted_bookings,
+			CASE
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_accepted_bookings = 0
+			THEN 	0
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_accepted_bookings IS NULL
+			THEN 	0
+			ELSE 	1
+			END,
+			business_intelligence.search_bookings_base_overview.nbr_paid_bookings,
+			CASE
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_paid_bookings = 0
+			THEN	0
+			WHEN	business_intelligence.search_bookings_base_overview.nbr_paid_bookings IS NULL
+			THEN	0
+			ELSE 	1
+			END,
+			business_intelligence.search_bookings_base_overview.net_revenue_eur
