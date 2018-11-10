@@ -1,6 +1,7 @@
 CREATE VIEW business_intelligence.offers_clicked_professinal_photo AS
 SELECT		ofc.search_id,
 			DATE(TIMESTAMP 'epoch' + ofc.created_at/1000 * INTERVAL '1 second') AS searched_at,
+			ofc.offer_id,
 			p.verification_internal_verified_by,
 			ags.roles,
 			CASE
@@ -13,3 +14,13 @@ LEFT JOIN	reporting.accommodation_offer ao ON ao.id = ofc.offer_id
 LEFT JOIN 	reporting.property p ON p.id = ao.property_id
 LEFT JOIN	reporting.agency_staff ags ON p.verification_internal_verified_by = ags.id
 WHERE		event_name = 'guest_click_offer'
+GROUP BY	ofc.search_id,
+			DATE(TIMESTAMP 'epoch' + ofc.created_at/1000 * INTERVAL '1 second') ,
+			ofc.offer_id,
+			p.verification_internal_verified_by,
+			ags.roles,
+			CASE
+			WHEN	ags.roles LIKE '%PHOTO%'
+			THEN 	1
+			ELSE 	0
+			END
