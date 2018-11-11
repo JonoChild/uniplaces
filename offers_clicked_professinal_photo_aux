@@ -1,4 +1,4 @@
-CREATE VIEW business_intelligence.offers_clicked_professinal_photo AS
+CREATE VIEW business_intelligence.offers_clicked_professinal_photo_aux AS
 SELECT		ofc.search_id,
 			DATE(TIMESTAMP 'epoch' + ofc.created_at/1000 * INTERVAL '1 second') AS searched_at,
 			ofc.offer_id,
