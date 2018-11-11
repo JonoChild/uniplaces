@@ -1,0 +1,13 @@
+
+CREATE VIEW business_intelligence.offers_clicked_professional_photos AS
+SELECT		search_id,
+			searched_at,
+			SUM(professional_photo),
+			CASE
+			WHEN SUM(professional_photo) = 0
+			THEN 0
+			ELSE 1
+			END AS offers_clicked_professional_photo
+FROM		business_intelligence.offers_clicked_professional_photo_aux
+GROUP BY	search_id,
+			searched_at
