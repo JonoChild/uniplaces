@@ -1,5 +1,5 @@
 CREATE VIEW	 business_intelligence.marketing_contribution_analysis_market_aux AS
-SELECT			DATE(requested_at) as cost_date,
+SELECT			DATE(requested_at) as request_date,
 				week,
 				market,
 				top_line_grouping,
@@ -7,7 +7,7 @@ SELECT			DATE(requested_at) as cost_date,
 				WHEN business_intelligence.marketing_cost_market.sum IS NULL
 				THEN 0
 				ELSE business_intelligence.marketing_cost_market.sum
-				END as cost,
+				END as marketing_cost,
 				COUNT(DISTINCT(booking_id)) as requests,
 				COUNT(DISTINCT(guest_id)) as nbr_guests,
 				SUM(
