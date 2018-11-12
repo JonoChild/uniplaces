@@ -11,3 +11,4 @@ SELECT			date,
 				cost,
 				net_revenue_eur - cost as contribution
 FROM			business_intelligence.marketing_contribution_analysis_market_aux
+WHERE			date >= DATEADD(day, -90, GETDATE())
