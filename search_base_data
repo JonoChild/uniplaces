@@ -9,6 +9,7 @@ SELECT			business_intelligence.search_info_base_aux.search_id,
 				business_intelligence.search_info_base_aux.searched_at_month,
 				business_intelligence.search_info_base_aux.searched_at_week,
 				business_intelligence.search_info_base_aux.experiment_id,
+				business_intelligence.search_info_base_aux.sort_by,
 				CASE
 				WHEN	(filter_free_text_search + filter_move_in + filter_move_out + filter_budget_minimum + filter_budget_maximum + filter_rent_types + filter_number_of_bedrooms + filter_number_of_bathrooms + filter_accommodation_types + filter_features + filter_suitable_for_erasmus_students + filter_suitable_for_domestic_students + filter_suitable_for_professional_placement + filter_gender_restrictions + filter_occupancy_restrictions + filter_bills_included) = 0
 				THEN 0
@@ -95,6 +96,7 @@ GROUP BY 		business_intelligence.search_info_base_aux.search_id,
 				business_intelligence.search_info_base_aux.searched_at_month,
 				business_intelligence.search_info_base_aux.searched_at_week,
 				business_intelligence.search_info_base_aux.experiment_id,
+				business_intelligence.search_info_base_aux.sort_by,
 				CASE
 				WHEN	(filter_free_text_search + filter_move_in + filter_move_out + filter_budget_minimum + filter_budget_maximum + filter_rent_types + filter_number_of_bedrooms + filter_number_of_bathrooms + filter_accommodation_types + filter_features + filter_suitable_for_erasmus_students + filter_suitable_for_domestic_students + filter_suitable_for_professional_placement + filter_gender_restrictions + filter_occupancy_restrictions + filter_bills_included) = 0
 				THEN 0
