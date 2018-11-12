@@ -1,6 +1,6 @@
 CREATE VIEW 	business_intelligence.marketing_contribution_analysis_market AS
-SELECT			date,
-				split_part(REPLACE (date,'-',''), ' ', 1) as date_dash,
+SELECT			cost_date as requested_at,
+				split_part(REPLACE (cost_date,'-',''), ' ', 1) as date_dash,
 				week,
 				market,
 				top_line_grouping,
@@ -11,4 +11,4 @@ SELECT			date,
 				cost,
 				net_revenue_eur - cost as contribution
 FROM			business_intelligence.marketing_contribution_analysis_market_aux
-WHERE			date >= DATEADD(day, -90, GETDATE())
+WHERE			cost_date >= DATEADD(day, -90, GETDATE())
