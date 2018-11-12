@@ -1,0 +1,23 @@
+CREATE VIEW business_intelligence.requests_weekly_by_source_overview AS
+SELECT		DATE(business_intelligence.requests_weekly_by_source.requested_at) as requested_at,
+			week,
+			market,
+			guest_nd_touch_top_line_grouping,
+			COUNT(DISTINCT(booking_id)) as requests,
+			COUNT(DISTINCT(guest_id)) as nbr_guests,
+			SUM(
+				CASE
+				WHEN paid_at IS NOT NULL
+				THEN 1
+				ELSE 0
+				END) as paid_bookings,
+				CASE
+				WHEN sum(net_renevue_eur)  IS NULL
+				THEN 0
+				ELSE sum(net_renevue_eur) 
+				END as net_revenue_eur
+FROM		business_intelligence.requests_weekly_by_source
+GROUP BY	DATE(business_intelligence.requests_weekly_by_source.requested_at),
+			week,
+			market,
+			guest_nd_touch_top_line_grouping
