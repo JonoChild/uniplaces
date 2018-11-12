@@ -1,5 +1,5 @@
 CREATE VIEW	 business_intelligence.marketing_contribution_analysis_market_aux AS
-SELECT			DATE(requested_at) as date,
+SELECT			DATE(requested_at) as cost_date,
 				week,
 				market,
 				top_line_grouping,
@@ -23,7 +23,7 @@ SELECT			DATE(requested_at) as date,
 				END as net_revenue_eur
 FROM			business_intelligence.requests_weekly_by_source
 LEFT JOIN		business_intelligence.marketing_cost_market
-				ON business_intelligence.marketing_cost_market.date =  DATE(business_intelligence.requests_weekly_by_source.requested_at) 
+				ON business_intelligence.marketing_cost_market.cost_date =  DATE(business_intelligence.requests_weekly_by_source.requested_at) 
 				AND
 				business_intelligence.marketing_cost_market.channel =  business_intelligence.requests_weekly_by_source.top_line_grouping
 				AND 
