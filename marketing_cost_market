@@ -1,9 +1,4 @@
-CREATE VIEW	business_intelligence.marketing_cost_market AS
-SELECT		DATE(date) as date,
-			destination_country,
-			channel,
-			sum(cost)
-FROM		business_intelligence.marketing_costs
-GROUP BY	DATE(date),
-			destination_country,
-			channel
+CREATE VIEW business_intelligence.marketing_cost_market AS
+SELECT date(marketing_costs.date) AS cost_date, marketing_costs.destination_country, marketing_costs.channel, sum(marketing_costs.cost) AS sum
+   FROM business_intelligence.marketing_costs
+  GROUP BY date(marketing_costs.date), marketing_costs.destination_country, marketing_costs.channel;
