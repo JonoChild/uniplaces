@@ -1,9 +1,11 @@
 CREATE VIEW business_intelligence.offers_professional_photos_search AS
 SELECT		business_intelligence.offers_professional_photos_search_aux.search_id,
 			business_intelligence.offers_professional_photos_search_aux.searched_at,
+			business_intelligence.search_base_data.searched_at_week,
 			business_intelligence.search_base_data.country,
 			business_intelligence.search_base_data.city,
 			business_intelligence.offers_professional_photos_search_aux.offer_id,
+			business_intelligence.offers_professional_photos_search_aux.professional_photo,
 			business_intelligence.offers_professional_photos_search_aux.group_position,
 			business_intelligence.offers_professional_photos_search_aux.offer_clicked,
 			CASE
@@ -37,9 +39,11 @@ LEFT JOIN	business_intelligence.search_bookings_base
 			business_intelligence.search_bookings_base.offer_id = business_intelligence.offers_professional_photos_search_aux.offer_id
 GROUP BY 	business_intelligence.offers_professional_photos_search_aux.search_id,
 			business_intelligence.offers_professional_photos_search_aux.searched_at,
+			business_intelligence.search_base_data.searched_at_week,
 			business_intelligence.search_base_data.country,
 			business_intelligence.search_base_data.city,
 			business_intelligence.offers_professional_photos_search_aux.offer_id,
+			business_intelligence.offers_professional_photos_search_aux.professional_photo,
 			business_intelligence.offers_professional_photos_search_aux.group_position,
 			business_intelligence.offers_professional_photos_search_aux.offer_clicked,
 			CASE
@@ -51,7 +55,7 @@ GROUP BY 	business_intelligence.offers_professional_photos_search_aux.search_id,
 			WHEN business_intelligence.search_bookings_base.accepted_at IS NULL
 			THEN 0
 			ELSE 1
-			END,
+			END ,
 			CASE
 			WHEN business_intelligence.search_bookings_base.paid_at IS NULL
 			THEN 0
