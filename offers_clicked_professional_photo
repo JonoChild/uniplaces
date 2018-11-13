@@ -8,10 +8,26 @@ SELECT		business_intelligence.offers_professional_photos_search_aux.search_id,
 			business_intelligence.offers_professional_photos_search_aux.professional_photo,
 			business_intelligence.offers_professional_photos_search_aux.group_position,
 			business_intelligence.offers_professional_photos_search_aux.offer_clicked,
-			business_intelligence.search_bookings_base.booking_id,
-			business_intelligence.search_bookings_base.accepted_at,
-			business_intelligence.search_bookings_base.paid_at,
-			sum(business_intelligence.search_bookings_base.net_revenue_eur)
+			CASE
+			WHEN business_intelligence.search_bookings_base.booking_id IS NULL
+			THEN 0
+			ELSE 1
+			END AS offer_w_booking_request,
+			CASE
+			WHEN business_intelligence.search_bookings_base.accepted_at IS NULL
+			THEN 0
+			ELSE 1
+			END AS offer_w_booking_accepted,
+			CASE
+			WHEN business_intelligence.search_bookings_base.paid_at IS NULL
+			THEN 0
+			ELSE 1
+			END AS offer_w_booking_paid,
+			CASE
+			WHEN sum(business_intelligence.search_bookings_base.net_revenue_eur) IS NULL
+			THEN 0
+			ELSE sum(business_intelligence.search_bookings_base.net_revenue_eur)
+			END AS net_revenue_eur
 FROM		business_intelligence.offers_professional_photos_search_aux
 LEFT JOIN	business_intelligence.search_base_data
 				ON
@@ -30,6 +46,18 @@ GROUP BY 	business_intelligence.offers_professional_photos_search_aux.search_id,
 			business_intelligence.offers_professional_photos_search_aux.professional_photo,
 			business_intelligence.offers_professional_photos_search_aux.group_position,
 			business_intelligence.offers_professional_photos_search_aux.offer_clicked,
-			business_intelligence.search_bookings_base.booking_id,
-			business_intelligence.search_bookings_base.accepted_at,
-			business_intelligence.search_bookings_base.paid_at
+			CASE
+			WHEN business_intelligence.search_bookings_base.booking_id IS NULL
+			THEN 0
+			ELSE 1
+			END ,
+			CASE
+			WHEN business_intelligence.search_bookings_base.accepted_at IS NULL
+			THEN 0
+			ELSE 1
+			END ,
+			CASE
+			WHEN business_intelligence.search_bookings_base.paid_at IS NULL
+			THEN 0
+			ELSE 1
+			END
