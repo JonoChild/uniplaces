@@ -1,4 +1,4 @@
-CREATE VIEW business_intelligence.offers_clicked_professional_photo AS
+CREATE VIEW business_intelligence.offers_professional_photos_search AS
 SELECT		business_intelligence.offers_professional_photos_search_aux.search_id,
 			business_intelligence.offers_professional_photos_search_aux.searched_at,
 			business_intelligence.search_base_data.country,
