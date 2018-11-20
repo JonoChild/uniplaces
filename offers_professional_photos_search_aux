@@ -3,24 +3,15 @@ SELECT		business_intelligence.search_results_professional_photos_aux.search_id,
 			business_intelligence.search_results_professional_photos_aux.searched_at,
 			business_intelligence.search_results_professional_photos_aux.offer_id,
 			business_intelligence.search_results_professional_photos_aux.group_position,
-			business_intelligence.search_results_professional_photos_aux.professional_photo,
-			CASE
-			WHEN business_intelligence.offers_clicked_professional_photo_aux.search_id IS NULL
-			THEN 	0
-			ELSE 	1
-			END AS offer_clicked
+			business_intelligence.search_results_professional_photos_aux.roles,
+			business_intelligence.offers_clicked_professinal_photo_aux.search_id as offer_clicked
 FROM		business_intelligence.search_results_professional_photos_aux
-LEFT JOIN	business_intelligence.offers_clicked_professional_photo_aux
-				ON business_intelligence.search_results_professional_photos_aux.search_id = business_intelligence.offers_clicked_professional_photo_aux.search_id
-				AND business_intelligence.search_results_professional_photos_aux.offer_id = business_intelligence.offers_clicked_professional_photo_aux.offer_id
-GROUP BY	business_intelligence.search_results_professional_photos_aux.search_id,
+LEFT JOIN	business_intelligence.offers_clicked_professinal_photo_aux
+				ON business_intelligence.search_results_professional_photos_aux.search_id = business_intelligence.offers_clicked_professinal_photo_aux.search_id
+				AND business_intelligence.search_results_professional_photos_aux.offer_id = business_intelligence.offers_clicked_professinal_photo_aux.offer_id
+GROUP BY		business_intelligence.search_results_professional_photos_aux.search_id,
 			business_intelligence.search_results_professional_photos_aux.searched_at,
 			business_intelligence.search_results_professional_photos_aux.offer_id,
 			business_intelligence.search_results_professional_photos_aux.group_position,
-			business_intelligence.search_results_professional_photos_aux.professional_photo,
-			CASE
-			WHEN business_intelligence.offers_clicked_professional_photo_aux.search_id IS NULL
-			THEN 	0
-			ELSE 	1
-			END
-LIMIT		100
+			business_intelligence.search_results_professional_photos_aux.roles,
+			business_intelligence.offers_clicked_professinal_photo_aux.search_id
