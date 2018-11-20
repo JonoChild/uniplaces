@@ -35,4 +35,4 @@ SELECT		search_id,
 			END AS has_paid_booking,
 			sum AS net_revenue
 FROM		business_intelligence.offers_professional_photos_search
-WHERE		DATEDIFF(day, current_date, searched_at) <= 90
+WHERE		DATEDIFF(day, current_date, searched_at) <= 60
