@@ -1,0 +1,38 @@
+CREATE VIEW business_intelligence.offers_professional_photos_search_dash AS
+SELECT		search_id,
+			searched_at,
+			searched_at_week,
+			country,
+			city,
+			tracking_id,
+			offer_id,
+			group_position,
+			CASE
+			WHEN roles LIKE '%PHOTO%'
+			THEN 1
+			ELSE 0
+			END AS professional_photo,
+			
+			CASE
+			WHEN offer_clicked IS NULL
+			THEN 0
+			ELSE 1
+			END AS offer_clicked,
+			CASE
+			WHEN booking_id IS NULL
+			THEN 0
+			ELSE 1
+			END AS has_request,
+			CASE
+			WHEN accepted_at IS NULL
+			THEN 0
+			ELSE 1
+			END AS has_booking_accepted,
+			CASE
+			WHEN paid_at IS NULL
+			THEN 0
+			ELSE 1
+			END AS has_paid_booking,
+			sum AS net_revenue
+FROM		business_intelligence.offers_professional_photos_search
+WHERE		DATEDIFF(day, current_date, searched_at) <= 90
