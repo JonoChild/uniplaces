@@ -5,16 +5,22 @@ SELECT
 			country,
 			city,
 			professional_photo,
-			COUNT(search_id),
-			COUNT(offer_id),
-			SUM(offer_clicked),
-			SUM(has_request),
-			SUM(has_booking_accepted),
-			SUM(has_paid_booking),
-			SUM(net_revenue)			
+			account_management_key_account,
+			offer_type,
+			score,
+			COUNT(search_id) as nbr_searches,
+			COUNT(offer_id) as nbr_offers,
+			SUM(offer_clicked) as nbr_offers_clicked,
+			SUM(has_request) as has_request,
+			SUM(has_booking_accepted) as has_booking_accepted,
+			SUM(has_paid_booking) as has_paid_booking,
+			SUM(net_revenue) as net_revenue			
 FROM		business_intelligence.offers_professional_photos_search_dash_aux
 GROUP BY	searched_at,
 			searched_at_week,
 			country,
 			city,
-			professional_photo
+			professional_photo,
+			account_management_key_account,
+			offer_type,
+			score
