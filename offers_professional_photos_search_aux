@@ -4,6 +4,9 @@ SELECT		business_intelligence.search_results_professional_photos_aux.search_id,
 			business_intelligence.search_results_professional_photos_aux.offer_id,
 			business_intelligence.search_results_professional_photos_aux.group_position,
 			business_intelligence.search_results_professional_photos_aux.roles,
+			business_intelligence.search_results_professional_photos_aux.account_management_key_account,
+			business_intelligence.search_results_professional_photos_aux.offer_type,
+			business_intelligence.search_results_professional_photos_aux.score,
 			business_intelligence.offers_clicked_professinal_photo_aux.search_id as offer_clicked
 FROM		business_intelligence.search_results_professional_photos_aux
 LEFT JOIN	business_intelligence.offers_clicked_professinal_photo_aux
@@ -14,4 +17,7 @@ GROUP BY		business_intelligence.search_results_professional_photos_aux.search_id
 			business_intelligence.search_results_professional_photos_aux.offer_id,
 			business_intelligence.search_results_professional_photos_aux.group_position,
 			business_intelligence.search_results_professional_photos_aux.roles,
+			business_intelligence.search_results_professional_photos_aux.account_management_key_account,
+			business_intelligence.search_results_professional_photos_aux.offer_type,
+			business_intelligence.search_results_professional_photos_aux.score,
 			business_intelligence.offers_clicked_professinal_photo_aux.search_id
