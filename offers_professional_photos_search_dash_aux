@@ -4,8 +4,10 @@ SELECT		search_id,
 			searched_at_week,
 			country,
 			city,
-			tracking_id,
 			offer_id,
+			account_management_key_account,
+			offer_type,
+			score,
 			group_position,
 			CASE
 			WHEN roles LIKE '%PHOTO%'
@@ -36,3 +38,40 @@ SELECT		search_id,
 			sum AS net_revenue
 FROM		business_intelligence.offers_professional_photos_search
 WHERE		DATEDIFF(day, current_date, searched_at) <= 90
+GROUP BY	search_id,
+			searched_at,
+			searched_at_week,
+			country,
+			city,
+			offer_id,
+			account_management_key_account,
+			offer_type,
+			score,
+			group_position,
+			CASE
+			WHEN roles LIKE '%PHOTO%'
+			THEN 1
+			ELSE 0
+			END ,
+			
+			CASE
+			WHEN offer_clicked IS NULL
+			THEN 0
+			ELSE 1
+			END ,
+			CASE
+			WHEN booking_id IS NULL
+			THEN 0
+			ELSE 1
+			END ,
+			CASE
+			WHEN accepted_at IS NULL
+			THEN 0
+			ELSE 1
+			END ,
+			CASE
+			WHEN paid_at IS NULL
+			THEN 0
+			ELSE 1
+			END ,
+			sum
