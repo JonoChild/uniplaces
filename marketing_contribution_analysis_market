@@ -1,6 +1,6 @@
 CREATE VIEW 	business_intelligence.marketing_contribution_analysis_market AS
-SELECT			cost_date as requested_at,
-				split_part(REPLACE (cost_date,'-',''), ' ', 1) as date_dash,
+SELECT			request_date as requested_at,
+				split_part(REPLACE (request_date,'-',''), ' ', 1) as date_dash,
 				week,
 				market,
 				top_line_grouping,
@@ -8,7 +8,18 @@ SELECT			cost_date as requested_at,
 				nbr_guests,
 				paid_bookings,
 				net_revenue_eur,
-				cost,
-				net_revenue_eur - cost as contribution
+				marketing_cost as cost,
+				net_revenue_eur - marketing_cost as contribution
 FROM			business_intelligence.marketing_contribution_analysis_market_aux
-WHERE			cost_date >= DATEADD(day, -90, GETDATE())
+WHERE			request_date >= DATEADD(day, -90, GETDATE())
+GROUP BY		request_date,
+				split_part(REPLACE (request_date,'-',''), ' ', 1),
+				week,
+				market,
+				top_line_grouping,
+				requests,
+				nbr_guests,
+				paid_bookings,
+				net_revenue_eur,
+				marketing_cost,
+				net_revenue_eur - marketing_cost
