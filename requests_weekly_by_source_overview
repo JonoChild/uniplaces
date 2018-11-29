@@ -1,8 +1,8 @@
 CREATE VIEW business_intelligence.requests_weekly_by_source_overview AS
-SELECT		DATE(business_intelligence.requests_weekly_by_source.requested_at) as requested_at,
+SELECT		CAST(business_intelligence.requests_weekly_by_source.requested_at as date) as requested_at,
 			week,
 			market,
-			guest_nd_touch_top_line_grouping,
+			CONVERT(CHARACTER VARYING (250),guest_nd_touch_top_line_grouping),
 			COUNT(DISTINCT(booking_id)) as requests,
 			COUNT(DISTINCT(guest_id)) as nbr_guests,
 			SUM(
@@ -17,7 +17,7 @@ SELECT		DATE(business_intelligence.requests_weekly_by_source.requested_at) as re
 				ELSE sum(net_renevue_eur) 
 				END as net_revenue_eur
 FROM		business_intelligence.requests_weekly_by_source
-GROUP BY	DATE(business_intelligence.requests_weekly_by_source.requested_at),
+GROUP BY	CAST(business_intelligence.requests_weekly_by_source.requested_at as date),
 			week,
 			market,
-			guest_nd_touch_top_line_grouping
+			CONVERT(CHARACTER VARYING (250),guest_nd_touch_top_line_grouping)
