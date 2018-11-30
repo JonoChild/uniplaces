@@ -9,6 +9,7 @@ SELECT		search_id,
 			offer_type,
 			score,
 			group_position,
+			current_page,
 			CASE
 			WHEN roles LIKE '%PHOTO%'
 			THEN 1
@@ -48,6 +49,7 @@ GROUP BY	search_id,
 			offer_type,
 			score,
 			group_position,
+			current_page,
 			CASE
 			WHEN roles LIKE '%PHOTO%'
 			THEN 1
@@ -75,3 +77,5 @@ GROUP BY	search_id,
 			ELSE 1
 			END ,
 			sum
+
+
