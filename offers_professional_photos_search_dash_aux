@@ -5,7 +5,11 @@ SELECT		search_id,
 			country,
 			city,
 			offer_id,
-			account_management_key_account,
+			CASE
+			WHEN account_management_key_account = 0
+			THEN 'SML'
+			ELSE 'KA'
+			END AS account_management_key_account ,
 			offer_type,
 			score,
 			group_position,
@@ -45,7 +49,11 @@ GROUP BY	search_id,
 			country,
 			city,
 			offer_id,
-			account_management_key_account,
+			CASE
+			WHEN account_management_key_account = 0
+			THEN 'SML'
+			ELSE 'KA'
+			END ,
 			offer_type,
 			score,
 			group_position,
