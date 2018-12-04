@@ -1,7 +1,7 @@
-CREATE VIEW	business_intelligence.requests_weekly_by_source AS 
-SELECT			EXTRACT(year from reporting.booking.requested_at) as year,
-				week_up as week,
-				reporting.booking.id as booking_id,
+CREATE VIEW	business_intelligence. requests_weekly_by_source AS
+SELECT			EXTRACT(year from requested_date) as year,
+				week_up,
+				b_id as booking_id,
 				reporting.property.address_city_code as city,
 				CASE
 				WHEN	focus_city_name IS NULL
@@ -9,10 +9,12 @@ SELECT			EXTRACT(year from reporting.booking.requested_at) as year,
 				ELSE	focus_city_name
 				END AS focus_city_name,
 				LEFT(reporting.property.address_city_code,2) AS market,
-				reporting.booking.current_state,
-				reporting.booking.guest_id,
-				business_intelligence.upl_guest_table_demand.last_touch_non_direct_top_line_grouping as guest_nd_touch_top_line_grouping,
-				business_intelligence.upl_guest_table_demand.last_touch_non_direct_cost_grouping as guest_nd_touch_top_cost_grouping,
+				business_intelligence.requests_weekly_by_source_aux.current_state,
+				business_intelligence.requests_weekly_by_source_aux.guest_id,
+				business_intelligence.requests_weekly_by_source_aux.last_touch_nd,
+				business_intelligence.requests_weekly_by_source_aux.last_touch_nd_source,
+				business_intelligence.source_classification.top_line_grouping,
+				business_intelligence.source_classification.cost_grouping,
 				reporting.booking.requested_at,
 				reporting.booking.accepted_at,
 				reporting.booking.rejected_at,
@@ -20,45 +22,35 @@ SELECT			EXTRACT(year from reporting.booking.requested_at) as year,
 				reporting.booking.paid_at,
 				reporting.booking.confirmed_at,
 				reporting.booking.cancelled_at,
-				public.upl_actions_v1.touch_id,
-				business_intelligence.touches_overall_view.top_line_grouping,
-				business_intelligence.touches_overall_view.cost_grouping,
-				SUM(reporting.transactions.money_value)/100 as net_renevue_eur
-FROM			reporting.booking
-LEFT JOIN		main.uniplaces_week
-					ON main.uniplaces_week.date_week = DATE(reporting.booking.requested_at)
+				business_intelligence.requests_weekly_by_source_aux.net_revenue as net_revenue_eur
+FROM		business_intelligence.requests_weekly_by_source_aux
+LEFT JOIN	main.uniplaces_week uw ON uw.date_week = DATE(business_intelligence.requests_weekly_by_source_aux.requested_date)
+LEFT JOIN		reporting.booking ON reporting.booking.id = business_intelligence.requests_weekly_by_source_aux.b_id
 LEFT JOIN		reporting.accommodation_offer 
 					ON reporting.accommodation_offer.id = reporting.booking.offer_id
 LEFT JOIN		reporting.property
 					ON reporting.property.id = reporting.accommodation_offer.property_id
 LEFT JOIN		reporting.accommodation_provider ON reporting.accommodation_provider.id = reporting.property.accommodation_provider_id
-LEFT JOIN		public.upl_actions_v1
-					ON public.upl_actions_v1.extra_info = reporting.booking.id
-LEFT JOIN		business_intelligence.touches_overall_view
-					ON business_intelligence.touches_overall_view.touch_id =  public.upl_actions_v1.touch_id
-LEFT JOIN		business_intelligence.upl_guest_table_demand
-					ON business_intelligence.upl_guest_table_demand.user_id = reporting.booking.guest_id 
 LEFT JOIN		main.focus_city
 					ON main.focus_city.city = reporting.property.address_city_code
-LEFT JOIN		reporting.transactions
-					ON reporting.transactions.booking_id = reporting.booking.id					
-WHERE			reporting.accommodation_provider.is_test = 0
-			AND	EXTRACT(year from reporting.booking.requested_at) > 2017
-			AND financial_has_payment_details = 1
-GROUP BY		EXTRACT(year from reporting.booking.requested_at),
+LEFT JOIN		business_intelligence.source_classification
+					ON business_intelligence.source_classification.upl_source =  business_intelligence.requests_weekly_by_source_aux.last_touch_nd_source
+GROUP BY 		EXTRACT(year from requested_date),
 				week_up,
-				reporting.booking.id,
-				reporting.property.address_city_code,
+				b_id ,
+				reporting.property.address_city_code ,
 				CASE
 				WHEN	focus_city_name IS NULL
 				THEN	'Others'
 				ELSE	focus_city_name
-				END,
+				END ,
 				LEFT(reporting.property.address_city_code,2),
-				reporting.booking.current_state,
-				reporting.booking.guest_id,
-				business_intelligence.upl_guest_table_demand.last_touch_non_direct_top_line_grouping,
-				business_intelligence.upl_guest_table_demand.last_touch_non_direct_cost_grouping,
+				business_intelligence.requests_weekly_by_source_aux.current_state,
+				business_intelligence.requests_weekly_by_source_aux.guest_id,
+				business_intelligence.requests_weekly_by_source_aux.last_touch_nd,
+				business_intelligence.requests_weekly_by_source_aux.last_touch_nd_source,
+				business_intelligence.source_classification.top_line_grouping,
+				business_intelligence.source_classification.cost_grouping,
 				reporting.booking.requested_at,
 				reporting.booking.accepted_at,
 				reporting.booking.rejected_at,
@@ -66,6 +58,4 @@ GROUP BY		EXTRACT(year from reporting.booking.requested_at),
 				reporting.booking.paid_at,
 				reporting.booking.confirmed_at,
 				reporting.booking.cancelled_at,
-				public.upl_actions_v1.touch_id,
-				business_intelligence.touches_overall_view.top_line_grouping,
-				business_intelligence.touches_overall_view.cost_grouping
+				business_intelligence.requests_weekly_by_source_aux.net_revenue
