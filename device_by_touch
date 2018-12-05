@@ -1,0 +1,14 @@
+CREATE VIEW 	business_intelligence.device_by_touch AS
+SELECT			DATE(created_at),
+				touch_id,
+				tracking_id,
+				device,
+				device_model
+FROM			upl_touches_v1
+WHERE			device IS NOT NULL
+		AND DATE(created_at) >= '2018-09-18'
+GROUP BY		DATE(created_at),
+				touch_id,
+				tracking_id,
+				device,
+				device_model
