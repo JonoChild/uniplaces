@@ -22,7 +22,8 @@ SELECT			EXTRACT(year from requested_date) as year,
 				reporting.booking.paid_at,
 				reporting.booking.confirmed_at,
 				reporting.booking.cancelled_at,
-				business_intelligence.requests_weekly_by_source_aux.net_revenue as net_revenue_eur
+				business_intelligence.requests_weekly_by_source_aux.net_revenue as net_revenue_eur,
+				business_intelligence.device_by_touch.device
 FROM		business_intelligence.requests_weekly_by_source_aux
 LEFT JOIN	main.uniplaces_week uw ON uw.date_week = DATE(business_intelligence.requests_weekly_by_source_aux.requested_date)
 LEFT JOIN		reporting.booking ON reporting.booking.id = business_intelligence.requests_weekly_by_source_aux.b_id
@@ -35,6 +36,8 @@ LEFT JOIN		main.focus_city
 					ON main.focus_city.city = reporting.property.address_city_code
 LEFT JOIN		business_intelligence.source_classification
 					ON business_intelligence.source_classification.upl_source =  business_intelligence.requests_weekly_by_source_aux.last_touch_nd_source
+LEFT JOIN		business_intelligence.device_by_touch
+					ON business_intelligence.device_by_touch.touch_id =  business_intelligence.requests_weekly_by_source_aux.last_touch_nd
 GROUP BY 		EXTRACT(year from requested_date),
 				week_up,
 				b_id ,
@@ -58,4 +61,5 @@ GROUP BY 		EXTRACT(year from requested_date),
 				reporting.booking.paid_at,
 				reporting.booking.confirmed_at,
 				reporting.booking.cancelled_at,
-				business_intelligence.requests_weekly_by_source_aux.net_revenue
+				business_intelligence.requests_weekly_by_source_aux.net_revenue,
+				business_intelligence.device_by_touch.device
