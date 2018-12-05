@@ -1,0 +1,65 @@
+ SELECT b.guest_id, date(b.paid_at) AS paid_date, b.current_state, 
+        CASE
+            WHEN (sum(bt.money_value) / 100) <= 0 THEN NULL::bigint
+            ELSE sum(bt.money_value) / 100
+        END AS net_revenue, t4.tracking_id, t4.b_id, t4.requested_date, lasttouchaux.touch_id AS last_touch2, t4.last_touch, t4.last_touch_at, lasttouchaux.source AS last_touch_source, lasttouchaux.medium AS last_touch_medium, lasttouchaux.campaign AS last_touch_campaign, (((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text AS last_touch_campaign_name, lasttouchaux.gclid AS last_touch_gclid, t4.mid_touch, midtouchaux.source AS mid_touch_source, midtouchaux.medium AS mid_touch_medium, midtouchaux.campaign AS mid_touch_campaign, (((midtouchaux.source::text || '-'::character varying::text) || midtouchaux.medium::text) || '-'::character varying::text) || midtouchaux.campaign::text AS mid_touch_campaign_name, midtouchaux.created_at AS mid_touch_at, midtouchaux.gclid AS mid_gclid, 
+        CASE
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) !~~ 'direct%'::character varying::text THEN t4.last_touch
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) ~~ 'direct%'::character varying::text AND ((((midtouchaux.source::text || '-'::character varying::text) || midtouchaux.medium::text) || '-'::character varying::text) || midtouchaux.campaign::text) IS NOT NULL THEN t4.mid_touch::character varying
+            ELSE t4.last_touch
+        END AS last_touch_nd, 
+        CASE
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) !~~ 'direct%'::character varying::text THEN lasttouchaux.source
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) ~~ 'direct%'::character varying::text AND ((((midtouchaux.source::text || '-'::character varying::text) || midtouchaux.medium::text) || '-'::character varying::text) || midtouchaux.campaign::text) IS NOT NULL THEN midtouchaux.source
+            ELSE lasttouchaux.source
+        END AS last_touch_nd_source, 
+        CASE
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) !~~ 'direct%'::character varying::text THEN lasttouchaux.medium
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) ~~ 'direct%'::character varying::text AND ((((midtouchaux.source::text || '-'::character varying::text) || midtouchaux.medium::text) || '-'::character varying::text) || midtouchaux.campaign::text) IS NOT NULL THEN midtouchaux.medium
+            ELSE lasttouchaux.medium
+        END AS last_touch_nd_medium, 
+        CASE
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) !~~ 'direct%'::character varying::text THEN lasttouchaux.campaign
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) ~~ 'direct%'::character varying::text AND ((((midtouchaux.source::text || '-'::character varying::text) || midtouchaux.medium::text) || '-'::character varying::text) || midtouchaux.campaign::text) IS NOT NULL THEN midtouchaux.campaign
+            ELSE lasttouchaux.campaign
+        END AS last_touch_nd_campaign, 
+        CASE
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) !~~ 'direct%'::character varying::text THEN (((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) ~~ 'direct%'::character varying::text AND ((((midtouchaux.source::text || '-'::character varying::text) || midtouchaux.medium::text) || '-'::character varying::text) || midtouchaux.campaign::text) IS NOT NULL THEN (((midtouchaux.source::text || '-'::character varying::text) || midtouchaux.medium::text) || '-'::character varying::text) || midtouchaux.campaign::text
+            ELSE (((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text
+        END AS last_touch_nd_campaign_name, 
+        CASE
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) !~~ 'direct%'::character varying::text THEN t4.last_touch_at
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) ~~ 'direct%'::character varying::text AND ((((midtouchaux.source::text || '-'::character varying::text) || midtouchaux.medium::text) || '-'::character varying::text) || midtouchaux.campaign::text) IS NOT NULL THEN midtouchaux.created_at
+            ELSE t4.last_touch_at
+        END AS last_touch_nd_at, 
+        CASE
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) !~~ 'direct%'::character varying::text THEN lasttouchaux.gclid
+            WHEN ((((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text) ~~ 'direct%'::character varying::text AND ((((midtouchaux.source::text || '-'::character varying::text) || midtouchaux.medium::text) || '-'::character varying::text) || midtouchaux.campaign::text) IS NOT NULL THEN midtouchaux.gclid
+            ELSE lasttouchaux.gclid
+        END AS last_touch_nd_gclid
+   FROM ( SELECT t3.tracking_id, t3.last_touch, t3.last_touch_at, t3.requested_date, t3.b_id, "max"(t3.mid_touch::text) AS mid_touch
+           FROM ( SELECT t1.tracking_id, t1.last_touch, t1.last_touch_at, t1.requested_date, t1.b_id, t2.mid_touch, t2.mid_touch_at
+                   FROM ( SELECT t.tracking_id, t.touch_id AS last_touch, t.created_at AS last_touch_at, a.created_at AS requested_date, a.extra_info AS b_id
+                           FROM upl_touches_v1 t
+                      JOIN upl_actions_v1 a ON t.touch_id::text = a.touch_id::text
+                 JOIN upl_users_v1 u ON u.tracking_id::text = t.tracking_id::text
+                WHERE a."action"::text = 'booking-request'::character varying::text AND u.user_type::text = 'guest'::character varying::text AND t.created_at >= '2018-09-18 00:00:00'::timestamp without time zone AND a.created_at >= '2018-09-18 00:00:00'::timestamp without time zone
+                GROUP BY t.tracking_id, t.touch_id, t.created_at, a.created_at, a.extra_info) t1
+              LEFT JOIN ( SELECT aux.tracking_id, t.touch_id AS mid_touch, aux.last_touch, aux.requested_date, t.created_at AS mid_touch_at, aux.b_id
+                           FROM ( SELECT t.tracking_id, t.touch_id AS last_touch, t.created_at AS last_touch_at, a.created_at AS requested_date, a.extra_info AS b_id
+                                   FROM upl_touches_v1 t
+                              JOIN upl_actions_v1 a ON t.touch_id::text = a.touch_id::text
+                         JOIN upl_users_v1 u ON u.tracking_id::text = t.tracking_id::text
+                        WHERE a."action"::text = 'booking-request'::character varying::text AND u.user_type::text = 'guest'::character varying::text AND t.created_at >= '2018-09-18 00:00:00'::timestamp without time zone AND a.created_at >= '2018-09-18 00:00:00'::timestamp without time zone
+                        GROUP BY t.tracking_id, t.touch_id, t.created_at, a.created_at, a.extra_info) aux
+                      LEFT JOIN upl_touches_v1 t ON aux.tracking_id::text = t.tracking_id::text
+                     WHERE (t.touch_id::text < aux.last_touch::text OR t.tracking_id IS NULL) AND t.source::text <> 'direct'::character varying::text
+                     GROUP BY aux.tracking_id, t.touch_id, aux.last_touch, aux.requested_date, t.created_at, aux.b_id) t2 ON t1.tracking_id::text = t2.tracking_id::text AND t1.last_touch::text = t2.last_touch::text
+             GROUP BY t1.tracking_id, t1.last_touch, t1.last_touch_at, t1.requested_date, t1.b_id, t2.mid_touch, t2.mid_touch_at) t3
+          GROUP BY t3.tracking_id, t3.last_touch, t3.last_touch_at, t3.requested_date, t3.b_id) t4
+   LEFT JOIN upl_touches_v1 midtouchaux ON midtouchaux.touch_id::text = t4.mid_touch
+   LEFT JOIN upl_touches_v1 lasttouchaux ON lasttouchaux.touch_id::text = t4.last_touch::text
+   LEFT JOIN reporting.booking b ON t4.b_id::text = b.id::character varying::text
+   LEFT JOIN reporting.transactions bt ON t4.b_id::text = bt.booking_id::character varying::text
+  GROUP BY b.guest_id, date(b.paid_at), b.current_state, t4.tracking_id, t4.b_id, t4.requested_date, lasttouchaux.touch_id, t4.last_touch, t4.last_touch_at, lasttouchaux.source, lasttouchaux.medium, lasttouchaux.campaign, (((lasttouchaux.source::text || '-'::character varying::text) || lasttouchaux.medium::text) || '-'::character varying::text) || lasttouchaux.campaign::text, lasttouchaux.gclid, t4.mid_touch, midtouchaux.source, midtouchaux.medium, midtouchaux.campaign, (((midtouchaux.source::text || '-'::character varying::text) || midtouchaux.medium::text) || '-'::character varying::text) || midtouchaux.campaign::text, midtouchaux.created_at, midtouchaux.gclid;
