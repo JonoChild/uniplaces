@@ -15,6 +15,8 @@ SELECT		business_intelligence.offers_professional_photos_search_aux.search_id,
 			business_intelligence.search_bookings_base.booking_id,
 			business_intelligence.search_bookings_base.accepted_at,
 			business_intelligence.search_bookings_base.paid_at,
+			business_intelligence.offers_professional_photos_search_aux.tracking_id,
+			business_intelligence.device_by_tracking_info.device,
 			sum(business_intelligence.search_bookings_base.net_revenue_eur)
 FROM		business_intelligence.offers_professional_photos_search_aux
 LEFT JOIN	business_intelligence.search_base_data
@@ -25,6 +27,9 @@ LEFT JOIN	business_intelligence.search_bookings_base
 			business_intelligence.search_bookings_base.search_id = business_intelligence.offers_professional_photos_search_aux.search_id
 				AND
 			business_intelligence.search_bookings_base.offer_id = business_intelligence.offers_professional_photos_search_aux.offer_id
+LEFT JOIN	business_intelligence.device_by_tracking_info 
+				ON
+				business_intelligence.device_by_tracking_info.tracking_id = business_intelligence.offers_professional_photos_search_aux.tracking_id 
 GROUP BY	business_intelligence.offers_professional_photos_search_aux.search_id,
 			business_intelligence.offers_professional_photos_search_aux.searched_at,
 			business_intelligence.search_base_data.searched_at_week,
@@ -40,4 +45,6 @@ GROUP BY	business_intelligence.offers_professional_photos_search_aux.search_id,
 			business_intelligence.offers_professional_photos_search_aux.offer_clicked,
 			business_intelligence.search_bookings_base.booking_id,
 			business_intelligence.search_bookings_base.accepted_at,
-			business_intelligence.search_bookings_base.paid_at
+			business_intelligence.search_bookings_base.paid_at,
+			business_intelligence.offers_professional_photos_search_aux.tracking_id,
+			business_intelligence.device_by_tracking_info.device
