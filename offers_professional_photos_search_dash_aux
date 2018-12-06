@@ -43,7 +43,7 @@ SELECT		search_id,
 			sum AS net_revenue,
 			device
 FROM		business_intelligence.offers_professional_photos_search
-WHERE		DATEDIFF(day, searched_at, current_date) <= 60
+WHERE		DATEDIFF(day, searched_at, current_date) <= 45
 GROUP BY	search_id,
 			searched_at,
 			searched_at_week,
