@@ -8,6 +8,7 @@ SELECT
 			account_management_key_account,
 			offer_type,
 			score,
+			device,
 			COUNT(search_id) as nbr_searches,
 			COUNT(offer_id) as nbr_offers,
 			SUM(offer_clicked) as nbr_offers_clicked,
@@ -23,4 +24,5 @@ GROUP BY	searched_at,
 			professional_photo,
 			account_management_key_account,
 			offer_type,
-			score
+			score,
+			device
