@@ -40,7 +40,8 @@ SELECT		search_id,
 			THEN 0
 			ELSE 1
 			END AS has_paid_booking,
-			sum AS net_revenue
+			sum AS net_revenue,
+			device
 FROM		business_intelligence.offers_professional_photos_search
 WHERE		DATEDIFF(day, searched_at, current_date) <= 60
 GROUP BY	search_id,
@@ -84,6 +85,7 @@ GROUP BY	search_id,
 			THEN 0
 			ELSE 1
 			END ,
-			sum
+			sum,
+			device
 
 
