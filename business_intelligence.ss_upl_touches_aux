@@ -1,0 +1,4 @@
+CREATE VIEW 	business_intelligence.ss_upl_touches_aux AS
+SELECT			*
+FROM			public.upl_touches_v1
+WHERE			referrer LIKE '%rent.uniplaces.com%'
