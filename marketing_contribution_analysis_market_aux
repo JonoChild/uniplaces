@@ -28,6 +28,8 @@ LEFT JOIN		business_intelligence.marketing_cost_market
 				business_intelligence.marketing_cost_market.channel =  business_intelligence.requests_weekly_by_source.top_line_grouping
 				AND 
 				business_intelligence.marketing_cost_market.destination_country=  business_intelligence.requests_weekly_by_source.market
+				AND
+				business_intelligence.marketing_cost_market.device=  business_intelligence.requests_weekly_by_source.device
 GROUP BY		DATE(requested_at),
 				week_up,
 				market,
@@ -37,3 +39,9 @@ GROUP BY		DATE(requested_at),
 				THEN 0
 				ELSE business_intelligence.marketing_cost_market.sum
 				END
+
+
+
+
+
+
