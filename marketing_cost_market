@@ -2,8 +2,13 @@ CREATE VIEW business_intelligence.marketing_cost_market AS
 SELECT 		CAST(marketing_costs.date as date) AS cost_date, 
 			CONVERT(CHARACTER VARYING (250), marketing_costs.destination_country), 
 			CONVERT(CHARACTER VARYING (250), marketing_costs.channel), 
+			CONVERT(CHARACTER VARYING (250), device_category.device),
 			sum(marketing_costs.cost) AS sum
 FROM 		business_intelligence.marketing_costs
+LEFT JOIN	business_intelligence.device_category
+					ON business_intelligence.device_category.device_name =  business_intelligence.marketing_costs.device
 GROUP BY 	CAST(marketing_costs.date as date), 
 			CONVERT(CHARACTER VARYING (250), marketing_costs.destination_country), 
-			CONVERT(CHARACTER VARYING (250), marketing_costs.channel);
+			CONVERT(CHARACTER VARYING (250), marketing_costs.channel),
+			CONVERT(CHARACTER VARYING (250), device_category.device);
+			
