@@ -3,6 +3,7 @@ SELECT			DATE(requested_at) as request_date,
 				week_up as week,
 				market,
 				top_line_grouping,
+				business_intelligence.requests_weekly_by_source.device,
 				CASE
 				WHEN business_intelligence.marketing_cost_market.sum IS NULL
 				THEN 0
@@ -34,14 +35,9 @@ GROUP BY		DATE(requested_at),
 				week_up,
 				market,
 				top_line_grouping,
+				business_intelligence.requests_weekly_by_source.device,
 				CASE
 				WHEN business_intelligence.marketing_cost_market.sum IS NULL
 				THEN 0
 				ELSE business_intelligence.marketing_cost_market.sum
 				END
-
-
-
-
-
-
