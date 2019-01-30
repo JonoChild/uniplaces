@@ -1,12 +1,55 @@
-CREATE VIEW 	business_intelligence.facebook_marketing_cost AS
-SELECT			
-				'Facebook' as channel,
-				date_1 as date,
-				campaign_name_1 as campaign,
-				device_platform as device,
-				destination_city,
-				destination_country,
-				amount_spent__eur_ as cost
-FROM		alooma.marketing_costs
-WHERE		_metadata_file_name = 'Adwords Cost BI/Facebook_cost'
-		AND date_1 IS NOT NULL
+CREATE VIEW business_intelligence.facebook_marketing_cost AS
+SELECT		'Facebook' as channel,
+			DATE(date_start) as date,
+			campaign_name as campaign,
+			impression_device as device,
+			CASE
+			WHEN campaign_name LIKE '%lisbon%'
+			THEN 'PT-lisbon'
+			WHEN campaign_name LIKE '%porto%'
+			THEN 'PT-porto'
+			WHEN campaign_name LIKE '%coimbra%'
+			THEN 'PT-coimbra'
+			WHEN campaign_name LIKE '%madrid%'
+			THEN 'ES-madrid'
+			WHEN campaign_name LIKE '%barcelona%'
+			THEN 'ES-barcelona'
+			WHEN campaign_name LIKE '%valencia%'
+			THEN 'ES-valencia'
+			WHEN campaign_name LIKE '%milan%'
+			THEN 'IT-milan'
+			WHEN campaign_name LIKE '%rome%'
+			THEN 'IT-rome'
+			WHEN campaign_name LIKE '%bologne%'
+			THEN 'IT-bologne'
+			WHEN campaign_name LIKE '%florence%'
+			THEN 'IT-florence'
+			WHEN campaign_name LIKE '%berlin%'
+			THEN 'DE-berlin'
+			WHEN campaign_name LIKE '%london%'
+			THEN 'GB-london'
+			WHEN campaign_name LIKE '%paris%'
+			THEN 'FR-paris'
+			WHEN campaign_name LIKE '%alcala%'
+			THEN 'ES-madrid'
+			ELSE 'XX'
+			END AS destination_city,
+			CASE
+			WHEN campaign_name LIKE '%-spain%'
+			THEN 'ES'
+			WHEN campaign_name LIKE '%-portugal%'
+			THEN 'PT'
+			WHEN campaign_name LIKE '%-italy%'
+			THEN 'IT'
+			WHEN campaign_name LIKE '%-france%'
+			THEN 'FR'
+			WHEN campaign_name LIKE '%-germany%'
+			THEN 'GE'
+			WHEN campaign_name LIKE '%-unitedkingdom%'
+			THEN 'GB'
+			WHEN campaign_name LIKE '%demand-xx%'
+			THEN 'XX'
+			ELSE 'XX'
+			END as destination_country,
+			spend as cost
+FROM		alooma.facebook_costs_daily
