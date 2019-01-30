@@ -1,0 +1,26 @@
+CREATE VIEW 	business_intelligence.marketing_costs_aux AS
+SELECT		*
+FROM		business_intelligence.adwords_marketing_cost
+UNION ALL
+SELECT		*
+FROM		business_intelligence.facebook_marketing_cost
+UNION ALL
+SELECT		*
+FROM		business_intelligence.bing_marketing_cost
+UNION ALL
+SELECT		*
+FROM		business_intelligence.criteo_marketing_cost
+UNION ALL
+SELECT		*
+FROM		business_intelligence.twitter_marketing_cost
+UNION ALL
+SELECT		*
+FROM		business_intelligence.linkedin_marketing_cost
+UNION ALL
+SELECT		*
+FROM		business_intelligence.nestpick_marketing_cost
+
+
+
+
+
