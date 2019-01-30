@@ -4,8 +4,55 @@ SELECT
 				date_1 as date,
 				campaign as campaign,
 				device_1 as device,
-				destination_city,
-				destination_country,
+				
+				CASE
+			WHEN campaign LIKE '%lisbon%'
+			THEN 'PT-lisbon'
+			WHEN campaign LIKE '%porto%'
+			THEN 'PT-porto'
+			WHEN campaign LIKE '%coimbra%'
+			THEN 'PT-coimbra'
+			WHEN campaign LIKE '%madrid%'
+			THEN 'ES-madrid'
+			WHEN campaign LIKE '%barcelona%'
+			THEN 'ES-barcelona'
+			WHEN campaign LIKE '%valencia%'
+			THEN 'ES-valencia'
+			WHEN campaign LIKE '%milan%'
+			THEN 'IT-milan'
+			WHEN campaign LIKE '%rome%'
+			THEN 'IT-rome'
+			WHEN campaign LIKE '%bologne%'
+			THEN 'IT-bologne'
+			WHEN campaign LIKE '%florence%'
+			THEN 'IT-florence'
+			WHEN campaign LIKE '%berlin%'
+			THEN 'DE-berlin'
+			WHEN campaign LIKE '%london%'
+			THEN 'GB-london'
+			WHEN campaign LIKE '%paris%'
+			THEN 'FR-paris'
+			WHEN campaign LIKE '%alcala%'
+			THEN 'ES-madrid'
+			ELSE 'XX'
+			END AS destination_city,
+			CASE
+			WHEN campaign LIKE '%-spain%'
+			THEN 'ES'
+			WHEN campaign LIKE '%-portugal%'
+			THEN 'PT'
+			WHEN campaign LIKE '%-italy%'
+			THEN 'IT'
+			WHEN campaign LIKE '%-france%'
+			THEN 'FR'
+			WHEN campaign LIKE '%-germany%'
+			THEN 'GE'
+			WHEN campaign LIKE '%-unitedkingdom%'
+			THEN 'GB'
+			WHEN campaign LIKE '%demand-xx%'
+			THEN 'XX'
+			ELSE 'XX'
+			END as destination_country,
 				cost_1 as cost
 FROM		alooma.marketing_costs
 WHERE		_metadata_file_name = 'Adwords Cost BI/criteo_cost'
