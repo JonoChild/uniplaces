@@ -5,5 +5,5 @@ SELECT			'Nestpick' as channel,
 				'NULL' as device,
 				'XX' as destination_city,
 				'XX' as destination_country,
-			 	net_revenue as cost
+			 	net_revenue*0.4 as cost
 FROM			alooma.nestpick_daily_costs
