@@ -1,12 +1,16 @@
-CREATE VIEW business_intelligence.marketing_costs AS
-SELECT		*
-FROM		business_intelligence.adwords_marketing_cost
-UNION ALL
-SELECT		*
-FROM		business_intelligence.bing_marketing_cost
-UNION ALL
-SELECT		*
-FROM		business_intelligence.facebook_marketing_cost
-UNION ALL
-SELECT		*
-FROM		business_intelligence.criteo_marketing_cost
+CREATE VIEW	business_intelligence.marketing_costs AS
+SELECT		channel,
+			date,
+			campaign,
+			business_intelligence.marketing_costs_aux.device as device_type,
+			business_intelligence.device_category.device,
+			destination_city,
+			destination_country,
+			CASE
+			WHEN	channel = 'Nestpick'
+			THEN	'Indirect Cost'
+			ELSE	'Direct Cost'
+			END AS	cost_type,
+			cost
+FROM 		business_intelligence.marketing_costs_aux
+LEFT JOIN	business_intelligence.device_category ON business_intelligence.device_category.device_name = business_intelligence.marketing_costs_aux.device
