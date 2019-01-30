@@ -1,12 +1,55 @@
-CREATE VIEW 	business_intelligence.adwords_marketing_cost AS
-SELECT			
-				'Google Adwords' as channel,
-				date_1 as date,
-				campaign_name_1 as campaign,
-				device_1 as device,
-				destination_city,
-				destination_country,
-				cost_1 as cost
-FROM		alooma.marketing_costs
-WHERE		_metadata_file_name = 'Adwords Cost BI/Adwords_cost'
-		AND date_1 IS NOT NULL
+CREATE VIEW business_intelligence.adwords_marketing_cost AS
+SELECT		'Google Adwords' as channel,
+			DATE(date) as date,
+			campaignname as campaign,
+			device as device,
+			CASE
+			WHEN campaignname LIKE '%lisbon%'
+			THEN 'PT-lisbon'
+			WHEN campaignname LIKE '%porto%'
+			THEN 'PT-porto'
+			WHEN campaignname LIKE '%coimbra%'
+			THEN 'PT-coimbra'
+			WHEN campaignname LIKE '%madrid%'
+			THEN 'ES-madrid'
+			WHEN campaignname LIKE '%barcelona%'
+			THEN 'ES-barcelona'
+			WHEN campaignname LIKE '%valencia%'
+			THEN 'ES-valencia'
+			WHEN campaignname LIKE '%milan%'
+			THEN 'IT-milan'
+			WHEN campaignname LIKE '%rome%'
+			THEN 'IT-rome'
+			WHEN campaignname LIKE '%bologne%'
+			THEN 'IT-bologne'
+			WHEN campaignname LIKE '%florence%'
+			THEN 'IT-florence'
+			WHEN campaignname LIKE '%berlin%'
+			THEN 'DE-berlin'
+			WHEN campaignname LIKE '%london%'
+			THEN 'GB-london'
+			WHEN campaignname LIKE '%paris%'
+			THEN 'FR-paris'
+			WHEN campaignname LIKE '%alcala%'
+			THEN 'ES-madrid'
+			ELSE 'XX'
+			END AS destination_city,
+			CASE
+			WHEN campaignname LIKE '%-spain%'
+			THEN 'ES'
+			WHEN campaignname LIKE '%-portugal%'
+			THEN 'PT'
+			WHEN campaignname LIKE '%-italy%'
+			THEN 'IT'
+			WHEN campaignname LIKE '%-france%'
+			THEN 'FR'
+			WHEN campaignname LIKE '%-germany%'
+			THEN 'GE'
+			WHEN campaignname LIKE '%-unitedkingdom%'
+			THEN 'GB'
+			WHEN campaignname LIKE '%demand-xx%'
+			THEN 'XX'
+			ELSE 'XX'
+			END as destination_country,
+			cost/1000000 as cost
+FROM		alooma.adwords_costs_daily
