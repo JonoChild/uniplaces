@@ -3,10 +3,56 @@ SELECT
 				'Bing' as channel,
 				date_1 as date,
 				campaign_name_1 as campaign,
-				device_type as device,
-				destination_city,
-				destination_country,
-				cost__eur_ as cost
+				device_type as device,	
+			CASE
+			WHEN campaign_name_1 LIKE '%lisbon%'
+			THEN 'PT-lisbon'
+			WHEN campaign_name_1 LIKE '%porto%'
+			THEN 'PT-porto'
+			WHEN campaign_name_1 LIKE '%coimbra%'
+			THEN 'PT-coimbra'
+			WHEN campaign_name_1 LIKE '%madrid%'
+			THEN 'ES-madrid'
+			WHEN campaign_name_1 LIKE '%barcelona%'
+			THEN 'ES-barcelona'
+			WHEN campaign_name_1 LIKE '%valencia%'
+			THEN 'ES-valencia'
+			WHEN campaign_name_1 LIKE '%milan%'
+			THEN 'IT-milan'
+			WHEN campaign_name_1 LIKE '%rome%'
+			THEN 'IT-rome'
+			WHEN campaign_name_1 LIKE '%bologne%'
+			THEN 'IT-bologne'
+			WHEN campaign_name_1 LIKE '%florence%'
+			THEN 'IT-florence'
+			WHEN campaign_name_1 LIKE '%berlin%'
+			THEN 'DE-berlin'
+			WHEN campaign_name_1 LIKE '%london%'
+			THEN 'GB-london'
+			WHEN campaign_name_1 LIKE '%paris%'
+			THEN 'FR-paris'
+			WHEN campaign_name_1 LIKE '%alcala%'
+			THEN 'ES-madrid'
+			ELSE 'XX'
+			END AS destination_city,
+			CASE
+			WHEN campaign_name_1 LIKE '%-spain%'
+			THEN 'ES'
+			WHEN campaign_name_1 LIKE '%-portugal%'
+			THEN 'PT'
+			WHEN campaign_name_1 LIKE '%-italy%'
+			THEN 'IT'
+			WHEN campaign_name_1 LIKE '%-france%'
+			THEN 'FR'
+			WHEN campaign_name_1 LIKE '%-germany%'
+			THEN 'GE'
+			WHEN campaign_name_1 LIKE '%-unitedkingdom%'
+			THEN 'GB'
+			WHEN campaign_name_1 LIKE '%demand-xx%'
+			THEN 'XX'
+			ELSE 'XX'
+			END as destination_country,
+			cost__eur_ as cost
 FROM		alooma.marketing_costs
 WHERE		_metadata_file_name = 'Adwords Cost BI/bing_cost'
 		AND date_1 IS NOT NULL
