@@ -1,7 +1,7 @@
 CREATE VIEW 	business_intelligence.nestpick_marketing_cost AS
 SELECT			'Nestpick' as channel,
 				DATE(requested_at) as date,
-				'Unknown' as campaign,
+				'Nestpick' as campaign,
 				'NULL' as device,
 				'XX' as destination_city,
 				'XX' as destination_country,
