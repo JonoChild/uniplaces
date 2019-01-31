@@ -1,0 +1,6 @@
+CREATE VIEW 	business_intelligence.offers_sf_test_rome_clicked_post AS
+SELECT			offer_id,
+				COUNT(DISTINCT(search_id))
+FROM			public.offer_search_click_v1
+WHERE			DATE(TIMESTAMP 'epoch' + created_at/1000 * INTERVAL '1 second') > '2019-01-25'
+GROUP BY		1
