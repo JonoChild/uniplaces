@@ -1,0 +1,30 @@
+CREATE VIEW 	business_intelligence.service_fee_rome_analysis_aux AS
+SELECT			business_intelligence.offers_sf_test_rome.offer_id,
+				business_intelligence.offers_sf_test_rome.price_test,
+				nbr_searches_pre,
+				nbr_searches_post,
+				nbr_clicks_pre,
+				nbr_clicks_post,
+				COUNT(DISTINCT(business_intelligence.bookings_sf_test_rome_pre.booking_id)) AS bookings_pre,
+				COUNT(DISTINCT(business_intelligence.bookings_sf_test_rome_post.booking_id)) AS bookings_post,
+				SUM(business_intelligence.bookings_sf_test_rome_pre.capped_service_fee) AS service_fee_pre,
+				SUM(business_intelligence.bookings_sf_test_rome_post.capped_service_fee) AS service_fee_post
+FROM			business_intelligence.offers_sf_test_rome
+LEFT JOIN		business_intelligence.offers_sf_test_rome_searches_pre 
+				ON business_intelligence.offers_sf_test_rome_searches_pre.offer_id = business_intelligence.offers_sf_test_rome.offer_id
+LEFT JOIN		business_intelligence.offers_sf_test_rome_searches_post 
+				ON business_intelligence.offers_sf_test_rome_searches_post.offer_id = business_intelligence.offers_sf_test_rome.offer_id
+LEFT JOIN		business_intelligence.offers_sf_test_rome_clicked_pre 
+				ON business_intelligence.offers_sf_test_rome_clicked_pre.offer_id = business_intelligence.offers_sf_test_rome.offer_id
+LEFT JOIN		business_intelligence.offers_sf_test_rome_clicked_post 
+				ON business_intelligence.offers_sf_test_rome_clicked_post.offer_id = business_intelligence.offers_sf_test_rome.offer_id
+LEFT JOIN		business_intelligence.bookings_sf_test_rome_pre 
+				ON business_intelligence.bookings_sf_test_rome_pre.offer_id = business_intelligence.offers_sf_test_rome.offer_id
+LEFT JOIN		business_intelligence.bookings_sf_test_rome_post
+				ON business_intelligence.bookings_sf_test_rome_post.offer_id = business_intelligence.offers_sf_test_rome.offer_id
+GROUP BY		 business_intelligence.offers_sf_test_rome.offer_id,
+				business_intelligence.offers_sf_test_rome.price_test,
+				nbr_searches_pre,
+				nbr_searches_post,
+				nbr_clicks_pre,
+				nbr_clicks_post
