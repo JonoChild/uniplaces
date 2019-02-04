@@ -1,0 +1,11 @@
+CREATE VIEW 	business_intelligence.bookings_sf_test_rome_post AS
+SELECT			id as booking_id,
+				offer_id,
+				DATE(requested_at) as requested_at,
+				DATE(paid_at) as paid_at,
+				pricing_first_response_first_payment_original_amount/100 as first_rent_original_ammount,
+				pricing_first_response_fee_values_capped_amount /100 as capped_service_fee,
+				pricing_first_response_fee_values_original_amount/100 as original_service_fee
+FROM			reporting.booking
+WHERE			financial_has_payment_details = 1
+			AND DATE(requested_at) > '2019-01-25'
