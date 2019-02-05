@@ -1,0 +1,12 @@
+CREATE VIEW business_intelligence.contract_analysis_requests AS
+SELECT		offer_id,
+			COUNT(id) as nbr_requests,
+			CASE
+			WHEN COUNT(id) > 0
+			THEN 1
+			ELSE 0
+			END AS has_request
+FROM		reporting.booking
+WHERE		DATE(requested_at) BETWEEN DATEADD(month,-6,CURRENT_DATE) AND CURRENT_DATE
+		AND financial_has_payment_details = 1
+GROUP BY	offer_id
