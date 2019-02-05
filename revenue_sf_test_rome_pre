@@ -1,7 +1,7 @@
 CREATE VIEW 	business_intelligence.revenue_sf_test_rome_pre AS
 SELECT			rev_booking_id,
 				offer_id,
-				sum(rev_total_net_eur)
+				sum(rev_total_net_eur) as net_revenue_pre
 FROM			main.rep_fin_revenue
 LEFT JOIN		reporting.booking ON reporting.booking.id = main.rep_fin_revenue.rev_booking_id
 WHERE			rev_total_net_eur >=0
