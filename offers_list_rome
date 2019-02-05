@@ -5,7 +5,9 @@ SELECT				ao.id AS offer_id,
 					CASE 
 					WHEN price_test = 1
 					THEN 1
-					ELSE 0
+					WHEN price_test = 0
+					THEN 0
+					ELSE 2
 					END AS price_test
 FROM				reporting.accommodation_offer ao
 LEFT JOIN			reporting.property AS p ON p.id = ao.property_id
