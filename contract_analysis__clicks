@@ -1,4 +1,4 @@
-CREATE VIEW 	business_intelligence.contract_analysis__clicks AS
+CREATE VIEW 	business_intelligence.contract_analysis_clicks AS
 SELECT			offer_id,
 				COUNT(DISTINCT(search_id)) as nbr_clicks
 FROM			public.offer_search_click_v1
