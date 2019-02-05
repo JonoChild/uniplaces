@@ -1,42 +1,20 @@
-CREATE VIEW		business_intelligence.service_fee_rome_analysis_aux AS
-SELECT			business_intelligence.offers_sf_test_rome.offer_id,
-				business_intelligence.offers_sf_test_rome.price_test,
-				nbr_searches_pre,
-				nbr_searches_post,
-				nbr_clicks_pre,
-				nbr_clicks_post,
-				COUNT(DISTINCT(business_intelligence.bookings_sf_test_rome_pre.booking_id)) AS requests_pre,
-				CASE
-				WHEN COUNT(DISTINCT(business_intelligence.bookings_sf_test_rome_pre.booking_id)) > 0
-				THEN 1
-				ELSE 0
-				END AS had_requests_pre,  
-				COUNT(DISTINCT(business_intelligence.bookings_sf_test_rome_post.booking_id)) AS requests_post,
-				CASE
-				WHEN COUNT(DISTINCT(business_intelligence.bookings_sf_test_rome_post.booking_id)) > 0
-				THEN 1
-				ELSE 0
-				END AS had_requests_post,
-				SUM(business_intelligence.bookings_sf_test_rome_pre.capped_service_fee) AS service_fee_pre,
-				SUM(business_intelligence.bookings_sf_test_rome_post.capped_service_fee) AS service_fee_post,
-				SUM(business_intelligence.bookings_sf_test_rome_pre.net_revenue) AS net_revenue_pre,
-				SUM(business_intelligence.bookings_sf_test_rome_post.net_revenue) AS net_revenue_post
-FROM			business_intelligence.offers_sf_test_rome
-LEFT JOIN		business_intelligence.offers_sf_test_rome_searches_pre 
-				ON business_intelligence.offers_sf_test_rome_searches_pre.offer_id = business_intelligence.offers_sf_test_rome.offer_id
-LEFT JOIN		business_intelligence.offers_sf_test_rome_searches_post 
-				ON business_intelligence.offers_sf_test_rome_searches_post.offer_id = business_intelligence.offers_sf_test_rome.offer_id
-LEFT JOIN		business_intelligence.offers_sf_test_rome_clicked_pre 
-				ON business_intelligence.offers_sf_test_rome_clicked_pre.offer_id = business_intelligence.offers_sf_test_rome.offer_id
-LEFT JOIN		business_intelligence.offers_sf_test_rome_clicked_post 
-				ON business_intelligence.offers_sf_test_rome_clicked_post.offer_id = business_intelligence.offers_sf_test_rome.offer_id
-LEFT JOIN		business_intelligence.bookings_sf_test_rome_pre 
-				ON business_intelligence.bookings_sf_test_rome_pre.offer_id = business_intelligence.offers_sf_test_rome.offer_id
-LEFT JOIN		business_intelligence.bookings_sf_test_rome_post
-				ON business_intelligence.bookings_sf_test_rome_post.offer_id = business_intelligence.offers_sf_test_rome.offer_id
-GROUP BY		business_intelligence.offers_sf_test_rome.offer_id,
-				business_intelligence.offers_sf_test_rome.price_test,
-				nbr_searches_pre,
-				nbr_searches_post,
-				nbr_clicks_pre,
-				nbr_clicks_post
+CREATE VIEW 	business_intelligence.bookings_sf_test_rome_post AS
+SELECT			id as booking_id,
+				offer_id,
+				DATE(requested_at) as requested_at,
+				DATE(paid_at) as paid_at,
+				pricing_first_response_first_payment_original_amount/100 as first_rent_original_ammount,
+				pricing_first_response_fee_values_capped_amount /100 as capped_service_fee,
+				pricing_first_response_fee_values_original_amount/100 as original_service_fee,
+				SUM(rev_total_net_eur) as net_revenue
+FROM			reporting.booking
+LEFT JOIN		main.rep_fin_revenue ON main.rep_fin_revenue.rev_booking_id = reporting.booking.id
+WHERE			financial_has_payment_details = 1
+			AND DATE(requested_at) > '2019-01-25'
+GROUP BY		id ,
+				offer_id,
+				DATE(requested_at) ,
+				DATE(paid_at),
+				pricing_first_response_first_payment_original_amount/100 ,
+				pricing_first_response_fee_values_capped_amount /100 ,
+				pricing_first_response_fee_values_original_amount/100
