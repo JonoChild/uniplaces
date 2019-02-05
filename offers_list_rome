@@ -1,0 +1,20 @@
+CREATE VIEW		business_intelligence.offers_list_rome AS
+SELECT				ao.id AS offer_id,
+					ao.reference_rent_amount/100 as "Rent",
+					p.address_city_code,
+					CASE 
+					WHEN price_test = 1
+					THEN 1
+					ELSE 0
+					END AS price_test
+FROM				reporting.accommodation_offer ao
+LEFT JOIN			reporting.property AS p ON p.id = ao.property_id
+LEFT JOIN			reporting.accommodation_provider AS ap ON ap.id = p.accommodation_provider_id
+LEFT JOIN			business_intelligence.offers_sf_test_rome ot ON ot.offer_id = ao.id
+WHERE				ap.is_test = 0
+				AND ao.parent_id IS NULL
+				AND ao.published_at IS NOT NULL
+				AND p.out_of_platform = 0 
+				AND ao.active = 1 
+				AND ao.published = 1
+				AND p.address_city_code = 'IT-rome';
