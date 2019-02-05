@@ -1,0 +1,20 @@
+CREATE VIEW		business_intelligence.offer_base_contract_analysis AS
+SELECT				reporting.accommodation_offer.id as offer_id,
+					reporting.accommodation_offer.offer_type,
+					reporting.accommodation_offer.number_of_units,
+					reporting.accommodation_offer.contract_type,
+					reporting.accommodation_offer.contract_has_admin_fee,
+					reporting.accommodation_offer.reference_rent_amount/100 as rent,
+					reporting.property.address_city_code,
+					reporting.property.typology_accommodation_type_code
+FROM				reporting.accommodation_offer 
+LEFT JOIN			reporting.property ON reporting.property.id = reporting.accommodation_offer.property_id
+LEFT JOIN			reporting.accommodation_provider  ON reporting.accommodation_provider.id = reporting.property.accommodation_provider_id
+WHERE				reporting.property.out_of_platform = 0 
+				AND reporting.accommodation_provider.is_test = 0 
+				AND reporting.accommodation_provider.out_of_platform = 0
+				AND reporting.accommodation_offer.parent_id IS NULL
+				AND reporting.accommodation_offer.published_at IS NOT NULL				AND reporting.accommodation_offer.active = 1 
+				AND reporting.accommodation_offer.published = 1 
+				AND reporting.accommodation_offer.offer_type = 'bedroom'
+				AND	reporting.accommodation_offer.contract_exclusive = 0
