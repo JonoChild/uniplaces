@@ -1,5 +1,5 @@
 CREATE VIEW 	business_intelligence.revenue_sf_test_rome_post AS
-SELECT			rev_booking_id,
+SELECT			
 				offer_id,
 				sum(rev_total_net_eur) as net_revenue_post
 FROM			main.rep_fin_revenue
