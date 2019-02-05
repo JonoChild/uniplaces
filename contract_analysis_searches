@@ -1,0 +1,6 @@
+CREATE VIEW	business_intelligence.contract_analysis_searches AS
+SELECT		offer_id,
+			COUNT(DISTINCT(search_id)) as nbr_searches
+FROM		public.offer_search_results_v1
+WHERE     	DATE(TIMESTAMP 'epoch' + created_at/1000 * INTERVAL '1 second') BETWEEN DATEADD(month,-6,CURRENT_DATE) AND CURRENT_DATE
+GROUP BY	offer_id
