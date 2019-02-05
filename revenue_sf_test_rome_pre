@@ -1,0 +1,9 @@
+
+CREATE VIEW business_intelligence.revenue_sf_test_rome_pre AS
+SELECT		offer_id,
+			SUM(rev_total_net_eur) as net_revenue_pre
+FROM		main.rep_fin_revenue
+LEFT JOIN	reporting.booking ON reporting.booking.id = main.rep_fin_revenue.rev_booking_id
+WHERE		DATE(rev_date) BETWEEN '2018-12-25' AND '2019-01-25'
+GROUP BY	offer_id,
+			DATE(rev_date)
