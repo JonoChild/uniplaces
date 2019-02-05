@@ -6,5 +6,4 @@ FROM			main.rep_fin_revenue
 LEFT JOIN		reporting.booking ON reporting.booking.id = main.rep_fin_revenue.rev_booking_id
 WHERE			rev_total_net_eur >=0
 			AND DATE(rev_date) > '2019-01-25'
-GROUP BY		rev_booking_id,
-				offer_id
+GROUP BY		offer_id
