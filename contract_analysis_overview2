@@ -1,0 +1,22 @@
+CREATE VIEW		business_intelligence.contract_analysis_overview AS 
+SELECT				search_date,
+					offer_type,
+					number_of_units,
+					contract_type,
+					contract_has_admin_fee,
+					rent,
+					address_city_code,
+					market,
+					SUM(nbr_searches) AS nbr_searches,
+					SUM(nbr_clicks) AS nbr_clicks,
+					SUM(nbr_requests) AS nbr_requests ,
+					SUM(has_request) AS has_request
+FROM				business_intelligence.contract_analysis_overview_aux2
+GROUP BY			search_date,
+					offer_type,
+					number_of_units,
+					contract_type,
+					contract_has_admin_fee,
+					rent,
+					address_city_code,
+					market
