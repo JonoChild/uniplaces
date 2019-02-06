@@ -7,31 +7,56 @@ SELECT				business_intelligence.offer_base_contract_analysis.offer_id,
 					business_intelligence.offer_base_contract_analysis.rent,
 					business_intelligence.offer_base_contract_analysis.address_city_code,
 					LEFT(business_intelligence.offer_base_contract_analysis.address_city_code,2) as market,
-					business_intelligence.offer_base_contract_analysis.typology_accommodation_type_code,
+					business_intelligence.contract_analysis_overview_aux.date as search_date,
 					CASE
-					WHEN business_intelligence.contract_analysis_searches.nbr_searches IS NULL
+					WHEN business_intelligence.contract_analysis_overview_aux.nbr_searches IS NULL
 					THEN 0
-					ELSE business_intelligence.contract_analysis_searches.nbr_searches
+					ELSE business_intelligence.contract_analysis_overview_aux.nbr_searches
 					END AS nbr_searches,
 					CASE
-					WHEN business_intelligence.contract_analysis_clicks.nbr_clicks IS NULL
+					WHEN business_intelligence.contract_analysis_overview_aux.nbr_clicks IS NULL
 					THEN 0
-					ELSE business_intelligence.contract_analysis_clicks.nbr_clicks
+					ELSE business_intelligence.contract_analysis_overview_aux.nbr_clicks
 					END AS  nbr_clicks,
 					CASE
-					WHEN business_intelligence.contract_analysis_requests.nbr_requests IS NULL
+					WHEN business_intelligence.contract_analysis_overview_aux.nbr_requests IS NULL
 					THEN 0
-					ELSE business_intelligence.contract_analysis_requests.nbr_requests
+					ELSE business_intelligence.contract_analysis_overview_aux.nbr_requests
 					END AS  nbr_requests,
 					CASE
-					WHEN business_intelligence.contract_analysis_requests.has_request IS NULL
+					WHEN business_intelligence.contract_analysis_overview_aux.has_request IS NULL
 					THEN 0
-					ELSE business_intelligence.contract_analysis_requests.has_request
+					ELSE business_intelligence.contract_analysis_overview_aux.has_request
 					END AS  has_request
 FROM				business_intelligence.offer_base_contract_analysis
-LEFT JOIN			business_intelligence.contract_analysis_searches 
-						ON business_intelligence.contract_analysis_searches.offer_id = business_intelligence.offer_base_contract_analysis.offer_id
-LEFT JOIN			business_intelligence.contract_analysis_clicks
-						ON business_intelligence.contract_analysis_clicks.offer_id =  business_intelligence.offer_base_contract_analysis.offer_id
-LEFT JOIN			business_intelligence.contract_analysis_requests
-						ON business_intelligence.contract_analysis_requests.offer_id =  business_intelligence.offer_base_contract_analysis.offer_id
+LEFT JOIN			business_intelligence.contract_analysis_overview_aux 
+					ON business_intelligence.contract_analysis_overview_aux.offer_id =  business_intelligence.offer_base_contract_analysis.offer_id
+GROUP BY			business_intelligence.offer_base_contract_analysis.offer_id,
+					business_intelligence.offer_base_contract_analysis.offer_type,
+					business_intelligence.offer_base_contract_analysis.number_of_units,
+					business_intelligence.offer_base_contract_analysis.contract_type,
+					business_intelligence.offer_base_contract_analysis.contract_has_admin_fee,
+					business_intelligence.offer_base_contract_analysis.rent,
+					business_intelligence.offer_base_contract_analysis.address_city_code,
+					LEFT(business_intelligence.offer_base_contract_analysis.address_city_code,2) ,
+					business_intelligence.contract_analysis_overview_aux.date,
+					CASE
+					WHEN business_intelligence.contract_analysis_overview_aux.nbr_searches IS NULL
+					THEN 0
+					ELSE business_intelligence.contract_analysis_overview_aux.nbr_searches
+					END ,
+					CASE
+					WHEN business_intelligence.contract_analysis_overview_aux.nbr_clicks IS NULL
+					THEN 0
+					ELSE business_intelligence.contract_analysis_overview_aux.nbr_clicks
+					END ,
+					CASE
+					WHEN business_intelligence.contract_analysis_overview_aux.nbr_requests IS NULL
+					THEN 0
+					ELSE business_intelligence.contract_analysis_overview_aux.nbr_requests
+					END ,
+					CASE
+					WHEN business_intelligence.contract_analysis_overview_aux.has_request IS NULL
+					THEN 0
+					ELSE business_intelligence.contract_analysis_overview_aux.has_request
+					END 
