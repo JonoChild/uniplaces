@@ -1,0 +1,20 @@
+CREATE VIEW	business_intelligence.contract_analysis_overview_aux AS
+
+SELECT		business_intelligence.contract_analysis_searches.offer_id,
+			business_intelligence.contract_analysis_searches.date,
+			business_intelligence.contract_analysis_searches.nbr_searches,
+			business_intelligence.contract_analysis_clicks.nbr_clicks,
+			business_intelligence.contract_analysis_requests.nbr_requests,
+			business_intelligence.contract_analysis_requests.has_request
+FROM		business_intelligence.contract_analysis_searches
+LEFT JOIN	business_intelligence.contract_analysis_clicks
+				ON 	business_intelligence.contract_analysis_clicks.offer_id = 
+					business_intelligence.contract_analysis_searches.offer_id
+				AND business_intelligence.contract_analysis_clicks.date = 
+					business_intelligence.contract_analysis_searches.date
+LEFT JOIN	business_intelligence.contract_analysis_requests
+				ON 	business_intelligence.contract_analysis_requests.offer_id = 
+					business_intelligence.contract_analysis_searches.offer_id
+				AND business_intelligence.contract_analysis_requests.date = 
+					business_intelligence.contract_analysis_searches.date
+					
