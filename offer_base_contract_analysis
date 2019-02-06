@@ -15,5 +15,5 @@ WHERE				reporting.property.out_of_platform = 0
 				AND reporting.accommodation_offer.parent_id IS NULL
 				AND reporting.accommodation_offer.published_at IS NOT NULL				AND reporting.accommodation_offer.active = 1 
 				AND reporting.accommodation_offer.published = 1 
-				AND reporting.accommodation_offer.offer_type = 'bedroom'
 				AND	reporting.accommodation_offer.contract_exclusive = 0
+				AND reporting.accommodation_provider.id <> 'f41f7eac-ffd8-44e1-a56e-94ba92b072c7'
