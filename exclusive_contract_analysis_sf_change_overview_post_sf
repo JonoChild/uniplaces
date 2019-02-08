@@ -1,5 +1,13 @@
 CREATE VIEW	business_intelligence.exclusive_contract_analysis_sf_change_overview_post_sf AS
-SELECT			business_intelligence.exclusive_contract_analysis_searches_post_sf_change.offer_id,
+SELECT		business_intelligence.exclusive_contract_analysis_searches_post_sf_change.offer_id,
+			business_intelligence.offer_base_exclusive_contract_analysis.contract_exclusive,
+			business_intelligence.offer_base_exclusive_contract_analysis.sf_drop,
+			business_intelligence.offer_base_exclusive_contract_analysis.offer_type,
+			business_intelligence.offer_base_exclusive_contract_analysis.number_of_units,
+			business_intelligence.offer_base_exclusive_contract_analysis.contract_type,
+			business_intelligence.offer_base_exclusive_contract_analysis.contract_has_admin_fee,
+			business_intelligence.offer_base_exclusive_contract_analysis.rent,
+			business_intelligence.offer_base_exclusive_contract_analysis.address_city_code,
 			business_intelligence.exclusive_contract_analysis_searches_post_sf_change.date,
 			business_intelligence.exclusive_contract_analysis_searches_post_sf_change.nbr_searches_post_sf,
 			business_intelligence.exclusive_contract_analysis_clicks_post_sf_change.nbr_clicks_post_sf,
@@ -15,3 +23,5 @@ LEFT JOIN	business_intelligence.exclusive_contract_analysis_requests_post_sf_cha
 					business_intelligence.exclusive_contract_analysis_searches_post_sf_change.offer_id
 				AND business_intelligence.exclusive_contract_analysis_requests_post_sf_change.date = 
 					business_intelligence.exclusive_contract_analysis_searches_post_sf_change.date
+LEFT JOIN	business_intelligence.offer_base_exclusive_contract_analysis
+				ON business_intelligence.offer_base_exclusive_contract_analysis.offer_id = business_intelligence.exclusive_contract_analysis_searches_post_sf_change.offer_id
