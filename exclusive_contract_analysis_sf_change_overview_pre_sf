@@ -1,4 +1,4 @@
-CREATE VIEW	business_intelligence.exclusive_contract_analysis_sf_change_overview_pre_sf AS
+CREATE VIEW	business_intelligence.exclusive_contract_analysis_sf_change_overview_pre_sf_aux AS
 
 SELECT		business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.offer_id,
 			business_intelligence.offer_base_exclusive_contract_analysis.contract_exclusive,
