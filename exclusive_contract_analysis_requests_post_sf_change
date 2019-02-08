@@ -1,0 +1,14 @@
+CREATE VIEW business_intelligence.exclusive_contract_analysis_requests_post_sf_change AS
+SELECT		offer_id,
+			DATE(requested_at) as date,
+			COUNT(id) as nbr_requests_post_sf,
+			CASE
+			WHEN COUNT(id) > 0
+			THEN 1
+			ELSE 0
+			END AS has_request_post
+FROM		reporting.booking
+WHERE		DATE(requested_at) >= '2019-02-02'
+		AND financial_has_payment_details = 1
+GROUP BY	offer_id,
+			DATE(requested_at)
