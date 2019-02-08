@@ -27,3 +27,11 @@ LEFT JOIN	business_intelligence.exclusive_contract_analysis_requests_pre_sf_chan
 					business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.date
 LEFT JOIN	business_intelligence.offer_base_exclusive_contract_analysis
 				ON business_intelligence.offer_base_exclusive_contract_analysis.offer_id = business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.offer_id
+
+;
+
+CREATE VIEW	business_intelligence.exclusive_contract_analysis_sf_change_overview_pre_sf AS
+
+SELECT		*
+FROM		business_intelligence.exclusive_contract_analysis_sf_change_overview_pre_sf_aux
+WHERE		contract_exclusive IS NOT NULL
