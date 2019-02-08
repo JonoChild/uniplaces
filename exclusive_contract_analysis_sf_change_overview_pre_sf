@@ -9,6 +9,7 @@ SELECT		business_intelligence.exclusive_contract_analysis_searches_pre_sf_change
 			business_intelligence.offer_base_exclusive_contract_analysis.contract_has_admin_fee,
 			business_intelligence.offer_base_exclusive_contract_analysis.rent,
 			business_intelligence.offer_base_exclusive_contract_analysis.address_city_code,
+			LEFT(business_intelligence.offer_base_exclusive_contract_analysis.address_city_code,2) as market,
 			business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.date,
 			business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.nbr_searches_pre_sf,
 			business_intelligence.exclusive_contract_analysis_clicks_pre_sf_change.nbr_clicks_pre_sf,
