@@ -1,0 +1,18 @@
+CREATE VIEW	business_intelligence.exclusive_contract_analysis_sf_change_overview_pre_sf AS
+
+SELECT		business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.offer_id,
+			business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.date,
+			business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.nbr_searches_pre_sf,
+			business_intelligence.exclusive_contract_analysis_clicks_pre_sf_change.nbr_clicks_pre_sf,
+			business_intelligence.exclusive_contract_analysis_requests_pre_sf_change.nbr_requests_pre_sf
+FROM		business_intelligence.exclusive_contract_analysis_searches_pre_sf_change
+LEFT JOIN	business_intelligence.exclusive_contract_analysis_clicks_pre_sf_change
+				ON 	business_intelligence.exclusive_contract_analysis_clicks_pre_sf_change.offer_id = 
+					business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.offer_id
+				AND business_intelligence.exclusive_contract_analysis_clicks_pre_sf_change.date = 
+					business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.date
+LEFT JOIN	business_intelligence.exclusive_contract_analysis_requests_pre_sf_change
+				ON 	business_intelligence.exclusive_contract_analysis_requests_pre_sf_change.offer_id = 
+					business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.offer_id
+				AND business_intelligence.exclusive_contract_analysis_requests_pre_sf_change.date = 
+					business_intelligence.exclusive_contract_analysis_searches_pre_sf_change.date
