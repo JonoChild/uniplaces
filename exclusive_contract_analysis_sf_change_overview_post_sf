@@ -1,4 +1,4 @@
-CREATE VIEW	business_intelligence.exclusive_contract_analysis_sf_change_overview_post_sf AS
+CREATE VIEW	business_intelligence.exclusive_contract_analysis_sf_change_overview_post_sf_aux AS
 SELECT		business_intelligence.exclusive_contract_analysis_searches_post_sf_change.offer_id,
 			business_intelligence.offer_base_exclusive_contract_analysis.contract_exclusive,
 			business_intelligence.offer_base_exclusive_contract_analysis.sf_drop,
@@ -26,3 +26,12 @@ LEFT JOIN	business_intelligence.exclusive_contract_analysis_requests_post_sf_cha
 					business_intelligence.exclusive_contract_analysis_searches_post_sf_change.date
 LEFT JOIN	business_intelligence.offer_base_exclusive_contract_analysis
 				ON business_intelligence.offer_base_exclusive_contract_analysis.offer_id = business_intelligence.exclusive_contract_analysis_searches_post_sf_change.offer_id
+
+
+;
+
+
+CREATE VIEW	business_intelligence.exclusive_contract_analysis_sf_change_overview_post_sf AS
+SELECT		*
+FROM		business_intelligence.exclusive_contract_analysis_sf_change_overview_post_sf_aux
+WHERE		contract_exclusive IS NOT NUL
