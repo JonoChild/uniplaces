@@ -1,4 +1,4 @@
-CREATE VIEW			business_intelligence.contract_analysis_overview_supply_base AS 
+CREATE VIEW		business_intelligence.contract_analysis_overview_supply_base AS 
 SELECT				business_intelligence.offer_base_contract_analysis.offer_id,
 					business_intelligence.offer_base_contract_analysis.offer_type,
 					business_intelligence.offer_base_contract_analysis.number_of_units,
@@ -30,6 +30,9 @@ SELECT				business_intelligence.offer_base_contract_analysis.offer_id,
 FROM				business_intelligence.offer_base_contract_analysis
 LEFT JOIN			business_intelligence.contract_analysis_overview_aux 
 					ON business_intelligence.contract_analysis_overview_aux.offer_id =  business_intelligence.offer_base_contract_analysis.offer_id
+WHERE				out_of_platform = 0
+				AND active = 1
+				AND published = 1
 GROUP BY			business_intelligence.offer_base_contract_analysis.offer_id,
 					business_intelligence.offer_base_contract_analysis.offer_type,
 					business_intelligence.offer_base_contract_analysis.number_of_units,
@@ -58,3 +61,4 @@ GROUP BY			business_intelligence.offer_base_contract_analysis.offer_id,
 					THEN 0
 					ELSE business_intelligence.contract_analysis_overview_aux.has_request
 					END 
+
