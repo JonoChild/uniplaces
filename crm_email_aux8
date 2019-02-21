@@ -1,0 +1,61 @@
+CREATE VIEW business_intelligence.crm_email_aux8 AS
+SELECT		user_email,
+			user_type,
+			sent_date,
+			delivered_at,
+			opened_at,
+			clicked_at,
+			bounced_at,
+			unsubscribed_at,
+			email_status,
+			campaign_type,
+			campaign_trigger_event,
+			campaign_id,	
+			campaign_permalink,
+			campaign_name,			
+			campaign_subject,
+			campaign_variation,
+			action,
+			city_event,
+			language,
+			CASE
+			WHEN	context_event_data_bookingid IS NULL
+			THEN 	context_event_data_booking_id
+			ELSE 	context_event_data_bookingid
+			END AS booking_id_1,
+			
+			context_event_data_bookingid_1,
+			CASE
+			WHEN 	context_event_data_offerid IS NULL
+			THEN 	context_event_data_accommodation_offer_id
+			ELSE  	context_event_data_offerid
+			END AS offer_id,
+			
+			context_event_data_offerid_1,
+			
+			CASE
+			WHEN 	context_event_data_booking_accommodation_provider IS NULL
+			THEN 	context_event_data_apid
+			ELSE 	context_event_data_booking_accommodation_provider
+			END AS accommodation_provider_id,
+			
+			context_event_data_booking_complaint_notes,
+			context_event_data_booking_complaint_type,
+			
+			campaign_campaign_title,
+			campaign_message_id,
+			campaign_email_subject,
+			campaign_series_title,
+			
+			
+			context_event_data_last_update,
+			context_event_data_offer_edit,
+			context_event_data_days_last_update,
+			context_event_data_month_available_from,
+			context_event_data_available_from,
+			rent_type,
+			alert_city,
+			alert_city_name,
+			alert_rent_type
+
+FROM		business_intelligence.crm_email_aux7
