@@ -1,6 +1,6 @@
 CREATE VIEW business_intelligence.crm_email_aux10 AS
 SELECT		user_email,
-			reporting.guest_admin.id as guest_id,
+			reporting.guest_admin.id as guest_id_1,
 			user_type,
 			sent_date,
 			delivered_at,
