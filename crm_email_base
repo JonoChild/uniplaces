@@ -1,0 +1,43 @@
+CREATE VIEW business_intelligence.crm_email_base AS
+SELECT		user_email,
+			CASE 
+			WHEN guest_notification_email IS NULL
+			THEN guest_id_registration_email
+			ELSE guest_notification_email
+			END AS guest_id,
+			user_type,
+			DATE(sent_date) as sent_date,
+			DATE(delivered_at) as delivered_at,
+			DATE(opened_at) as opened_at,
+			DATE(clicked_at) as clicked_at,
+			DATE(bounced_at) as bounced_at,
+			DATE(unsubscribed_at) as unsubscribed_at,
+			email_status,
+			campaign_type,
+			campaign_trigger_event,
+			campaign_campaign_title,
+			campaign_message_id,
+			campaign_email_subject,
+			campaign_id,	
+			campaign_permalink,
+			campaign_name,			
+			campaign_subject,
+			campaign_variation,
+			action,
+			city_event,
+			language,
+			booking_id,
+			offer_id,
+			accommodation_provider_id,
+			context_event_data_booking_complaint_notes,
+			context_event_data_booking_complaint_type,
+			context_event_data_last_update,
+			context_event_data_offer_edit,
+			context_event_data_days_last_update,
+			context_event_data_month_available_from,
+			context_event_data_available_from,
+			rent_type,
+			alert_city,
+			alert_city_name,
+			alert_rent_type
+FROM		business_intelligence.crm_email_aux11
