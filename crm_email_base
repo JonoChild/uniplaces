@@ -40,12 +40,15 @@ SELECT		user_email,
 			email_status,
 			campaign_type,
 			campaign_trigger_event,
-			campaign_campaign_title,
+			CASE
+			WHEN campaign_name IS NULL
+			THEN campaign_campaign_title
+			ELSE campaign_name
+			END AS campaign_name,
 			campaign_message_id,
 			campaign_email_subject,
 			campaign_id,	
 			campaign_permalink,
-			campaign_name,			
 			campaign_subject,
 			campaign_variation,
 			action,
@@ -66,3 +69,72 @@ SELECT		user_email,
 			alert_city_name,
 			alert_rent_type
 FROM		business_intelligence.crm_email_aux11
+GROUP BY	user_email,
+			CASE 
+			WHEN guest_notification_email IS NULL
+			THEN guest_id_registration_email
+			ELSE guest_notification_email
+			END,
+			user_type,
+			DATE(sent_date),
+			DATE(delivered_at) ,
+			CASE
+			WHEN DATE(delivered_at) IS NOT NULL
+			THEN 1
+			ELSE 0
+			END ,
+			DATE(opened_at) ,
+			CASE
+			WHEN DATE(opened_at) IS NOT NULL
+			THEN 1
+			ELSE 0
+			END ,
+			DATE(clicked_at),
+			CASE
+			WHEN DATE(clicked_at) IS NOT NULL
+			THEN 1
+			ELSE 0
+			END ,
+			DATE(bounced_at),
+			CASE
+			WHEN DATE(bounced_at) IS NOT NULL
+			THEN 1
+			ELSE 0
+			END ,
+			DATE(unsubscribed_at) ,
+			CASE
+			WHEN DATE(unsubscribed_at) IS NOT NULL
+			THEN 1
+			ELSE 0
+			END ,
+			email_status,
+			campaign_type,
+			campaign_trigger_event,
+			CASE
+			WHEN campaign_name IS NULL
+			THEN campaign_campaign_title
+			ELSE campaign_name
+			END ,
+			campaign_message_id,
+			campaign_email_subject,
+			campaign_id,	
+			campaign_permalink,
+			campaign_subject,
+			campaign_variation,
+			action,
+			city_event,
+			language,
+			booking_id,
+			offer_id,
+			accommodation_provider_id,
+			context_event_data_booking_complaint_notes,
+			context_event_data_booking_complaint_type,
+			context_event_data_last_update,
+			context_event_data_offer_edit,
+			context_event_data_days_last_update,
+			context_event_data_month_available_from,
+			context_event_data_available_from,
+			rent_type,
+			alert_city,
+			alert_city_name,
+			alert_rent_type
