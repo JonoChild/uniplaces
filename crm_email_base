@@ -8,10 +8,35 @@ SELECT		user_email,
 			user_type,
 			DATE(sent_date) as sent_date,
 			DATE(delivered_at) as delivered_at,
+			CASE
+			WHEN DATE(delivered_at) IS NOT NULL
+			THEN 1
+			ELSE 0
+			END AS is_delivered,
 			DATE(opened_at) as opened_at,
+			CASE
+			WHEN DATE(opened_at) IS NOT NULL
+			THEN 1
+			ELSE 0
+			END AS is_opened,
 			DATE(clicked_at) as clicked_at,
+			CASE
+			WHEN DATE(clicked_at) IS NOT NULL
+			THEN 1
+			ELSE 0
+			END AS is_clicked,
 			DATE(bounced_at) as bounced_at,
+			CASE
+			WHEN DATE(bounced_at) IS NOT NULL
+			THEN 1
+			ELSE 0
+			END AS is_bounced,
 			DATE(unsubscribed_at) as unsubscribed_at,
+			CASE
+			WHEN DATE(unsubscribed_at) IS NOT NULL
+			THEN 1
+			ELSE 0
+			END AS is_unsubscribed,
 			email_status,
 			campaign_type,
 			campaign_trigger_event,
