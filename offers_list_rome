@@ -16,4 +16,4 @@ LEFT JOIN			business_intelligence.offers_sf_test_rome ot ON ot.offer_id = ao.id
 WHERE				ap.is_test = 0
 				AND ao.parent_id IS NULL
 				AND ao.published_at IS NOT NULL
-				AND p.address_city_code = 'IT-rome';
+				AND (p.address_city_code = 'IT-rome' OR p.address_city_code = 'ES-madrid') ;
