@@ -1,6 +1,8 @@
+
+
+
 CREATE VIEW	business_intelligence.service_fee_rome_analysis_aux AS
 SELECT			business_intelligence.offers_list_rome.offer_id,
-				business_intelligence.offers_list_rome.address_city_code as city,
 				business_intelligence.offers_list_rome.price_test,
 				nbr_searches_pre,
 				nbr_searches_post,
@@ -40,7 +42,6 @@ LEFT JOIN		business_intelligence.revenue_sf_test_rome_pre
 LEFT JOIN		business_intelligence.revenue_sf_test_rome_post
 				ON business_intelligence.revenue_sf_test_rome_post.offer_id = business_intelligence.offers_list_rome.offer_id
 GROUP BY		business_intelligence.offers_list_rome.offer_id,
-				business_intelligence.offers_list_rome.address_city_code,
 				business_intelligence.offers_list_rome.price_test,
 				nbr_searches_pre,
 				nbr_searches_post,
